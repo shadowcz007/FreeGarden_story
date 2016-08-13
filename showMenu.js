@@ -1,11 +1,16 @@
 #pragma strict
 private var flag;
+var windowRect : Rect = Rect (20, 20, 520, 550);
 
+var P1:GameObject;
+
+var pos;
 
 function Start () {
 flag=false;
 Debug.Log(Screen.width);
 Debug.Log(Screen.height);
+
 }
 
 function OnMouseDown(){
@@ -49,6 +54,10 @@ function OnGUI(){
         
     }
 
+
+ //可移动的 Register the window.
+		windowRect = GUI.Window (0, windowRect, DoMyWindow,"3");
+
 }
 
 
@@ -56,6 +65,17 @@ function OnGUI(){
 
 function Update () {
 //Debug.Log(flag);
+Debug.Log(pos);
+pos= P1.GetComponent.<Transform>().position;
 }
 
 
+
+// 可移动的Make the contents of the window
+	function DoMyWindow (windowID : int) {
+		GUI.Button (Rect (10,20,100,20), "me"+pos);
+		// Insert a huge dragging area at the end.
+		// This gets clipped to the window (like all other controls) so you can never
+		//  drag the window from outside it.
+		GUI.DragWindow ();
+	}
