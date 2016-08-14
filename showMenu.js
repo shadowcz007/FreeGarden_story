@@ -1,5 +1,6 @@
 #pragma strict
-import UnityEngine.SceneManagement;//场景控制
+import UnityEngine.SceneManagement;
+
 
 private var flag;
 var windowRect : Rect = Rect (20, 20, 520, 550);
@@ -12,7 +13,9 @@ function Start () {
 flag=false;
 Debug.Log(Screen.width);
 Debug.Log(Screen.height);
-
+Debug.Log(SceneManager.sceneCount);//场景数量0表示1个场景，The total number of scenes.
+Debug.Log(SceneManager.GetSceneByName("2"));
+SceneManager.UnloadScene("2");//
 }
 
 function OnMouseDown(){
@@ -34,6 +37,7 @@ function OnGUI(){
 
 			
 			flag=false;
+		SceneManager.LoadScene("2");
 
 		};
 		
@@ -53,7 +57,7 @@ function OnGUI(){
     // Make the second button.
     if (GUI.Button (Rect (20,70,80,32), "Level 2")) {
         Debug.Log("levle2");
-        SceneManager.LoadScene("scene2");
+        
     }
 
 
