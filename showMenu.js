@@ -1,4 +1,6 @@
 #pragma strict
+import UnityEngine.SceneManagement;//场景控制
+
 private var flag;
 var windowRect : Rect = Rect (20, 20, 520, 550);
 
@@ -51,7 +53,7 @@ function OnGUI(){
     // Make the second button.
     if (GUI.Button (Rect (20,70,80,32), "Level 2")) {
         Debug.Log("levle2");
-        
+        SceneManager.LoadScene("scene2");
     }
 
 
