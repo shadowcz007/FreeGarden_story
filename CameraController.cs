@@ -18,6 +18,13 @@ public class SimpleInfo : MonoBehaviour
 
 	public float cameraRotateSpeed=20.0f;
 
+
+
+	public Transform target;
+	public float smoothspeed = 0.3F;
+	private Vector3 velocity = Vector3.zero;
+	private Vector3 targetPosition ;
+
 	void Awake(){
 
 	
@@ -89,8 +96,16 @@ public class SimpleInfo : MonoBehaviour
 	}
 
 	void Update(){
+
+
 		if(SelectedGameObject){
+			
 			camera.transform.RotateAround(SelectedGameObject.transform.position, Vector3.up, cameraRotateSpeed * Time.deltaTime);
+
+			if(camera.fieldOfView>20){
+				camera.fieldOfView-=smoothspeed;
+
+			}
 
 
 		}
