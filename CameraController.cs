@@ -107,18 +107,15 @@ public class SimpleInfo : MonoBehaviour
 
 			}
 
+			camera.transform.LookAt(SelectedGameObject.transform);
 
 		}
 
 
-		// Does the main camera exist?
-		if (camera){
-			// Get the world delta of all the fingers
-			var worldDelta = Lean.LeanTouch.GetDeltaWorldPosition(10.0f);
 
-			// Subtract the delta to the position
-			camera.transform.position -= worldDelta;
-		}
+
+			
+
 	
 	
 	}
