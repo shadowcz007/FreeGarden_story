@@ -13,7 +13,11 @@ public class SimpleInfo : MonoBehaviour
 	public LayerMask LayerMask = UnityEngine.Physics.DefaultRaycastLayers;
 
 	[Tooltip("The previously selected GameObject")]
-	public GameObject SelectedGameObject;
+
+	private GameObject SelectedGameObject;
+
+	public GameObject prefab; 
+
 	public float objectFieldofView=20.0f;
 
 	public float cameraRotateSpeed=20.0f;
@@ -23,17 +27,19 @@ public class SimpleInfo : MonoBehaviour
 	private Vector3 objScreenPos;
 	public Transform target;
 	public float smoothspeed = 0.3F;
-	private Vector3 velocity = Vector3.zero;
+
 	private Vector3 targetPosition ;
 
 
 	void Awake(){
 
-	
+
 	
 	}
 
 	void Start(){
+
+
 		//Static Variables
 		Debug.Log (Camera.allCameras.Length);// Returns all enabled cameras in the scene,==allCameraCount
 		Debug.Log (Camera.allCamerasCount);
@@ -114,7 +120,7 @@ public class SimpleInfo : MonoBehaviour
 			objScreenPos=camera.WorldToScreenPoint (SelectedGameObject.transform.position);
 
 			objScreenPos = new Vector2 (Mathf.Ceil(objScreenPos.x)+44, Mathf.Ceil(objScreenPos.y)-44);
-			Debug.Log ( Mathf.Ceil(objScreenPos.y));
+		//	Debug.Log ( Mathf.Ceil(objScreenPos.y));
 		}
 			
 	
@@ -218,11 +224,18 @@ public class SimpleInfo : MonoBehaviour
 	
 	public void OnFingerHeldDown(Lean.LeanFinger finger)
 	{
-		Debug.Log("Finger " + finger.Index + " began touching the screen for a long time");
+		Debug.Log("Finger " + finger.Index + "长按 began touching the screen for a long time");
 	}
 	
 	public void OnFingerHeld(Lean.LeanFinger finger)
 	{
+
+		for (int i = 0; i < 10; i++)
+			Instantiate(prefab, new Vector3(i * 2.0f, 0, 0), Quaternion.identity);
+
+
+
+
 		Debug.Log("Finger " + finger.Index + " is still touching the screen for a long time");
 	}
 	
