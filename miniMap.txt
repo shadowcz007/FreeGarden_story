@@ -1,0 +1,13 @@
+首先，我们创建一个Camera对象，改名为MiniMapCamera，设置Rotation让其视野朝下，面向地面，修改Projection为Orthographic。
+通过Size来调整摄像机高度。
+
+然后，Create——UI——RawImage，生成Canvas和RawImage，在Canvas下创建一个空物体叫做MiniMap，
+然后在MiniMap下创建一个Image对象，并给Image对象添加Mask组件（达到圆形效果）,修改Image对象名字为Mask，
+修改组件Image的SourceImage为Knob（Unity自带圆形Image）将RawImage拖拽到Mask下。
+
+接下来，在Pojects面板内创建一个RenderTexture，并将其拖拽到MiniMapCamera的TargetTexture中。
+设置RawImage的对象为该Texture。此时便能有一个初步的小地图了。
+
+ 为了美化这个简陋的小地图，我们可以在MiniMap下再添加一个RawImage，选择一个喜欢的图作为遮罩，
+ 确保该RawImage排在Mask下，这样便能覆盖Mask作为外遮罩对象。然后修改MiniMapCamera的CulingMask来选择小地图能看见的层。
+ 具体细节可以按自己的喜好来调节。
