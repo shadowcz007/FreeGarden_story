@@ -18,6 +18,7 @@ public class SimpleInfo : MonoBehaviour
 
 	public float cameraRotateSpeed=20.0f;
 
+	public Color selectedColor=Color.red;
 
 	private Vector3 objScreenPos;
 	public Transform target;
@@ -281,17 +282,17 @@ public class SimpleInfo : MonoBehaviour
 		{
 			// Remove the color from the currently selected one?
 			if (SelectedGameObject != null) {
-				ColorGameObject (SelectedGameObject, Color.white);
+				OutlineColorGameObject (SelectedGameObject, Color.black);
 			}
 
 			SelectedGameObject = hit.collider.gameObject;
 
 
-			ColorGameObject(SelectedGameObject, Color.green);
+			OutlineColorGameObject(SelectedGameObject,selectedColor);
 		}
 	}
 
-	private static void ColorGameObject(GameObject gameObject, Color color)
+	private static void OutlineColorGameObject(GameObject gameObject, Color color)
 	{
 		// Make sure the GameObject exists
 		if (gameObject != null)
@@ -304,13 +305,16 @@ public class SimpleInfo : MonoBehaviour
 			{
 				// Get material copy from this renderer
 				var material = renderer.material;
+				material.SetColor("_OutlineColor", color);
 
 				// Make sure the material exists
+				/*
 				if (material != null)
 				{
 					// Set new color
 					material.color = color;
 				}
+				*/
 			}
 		}
 	}
