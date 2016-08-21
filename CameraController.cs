@@ -14,16 +14,17 @@ public class SimpleInfo : MonoBehaviour
 
 	[Tooltip("The previously selected GameObject")]
 	public GameObject SelectedGameObject;
-
+	public float objectFieldofView=20.0f;
 
 	public float cameraRotateSpeed=20.0f;
 
 
-
+	private Vector3 objScreenPos;
 	public Transform target;
 	public float smoothspeed = 0.3F;
 	private Vector3 velocity = Vector3.zero;
 	private Vector3 targetPosition ;
+
 
 	void Awake(){
 
@@ -102,26 +103,31 @@ public class SimpleInfo : MonoBehaviour
 			
 			camera.transform.RotateAround(SelectedGameObject.transform.position, Vector3.up, cameraRotateSpeed * Time.deltaTime);
 
-			if(camera.fieldOfView>20){
+			if(camera.fieldOfView>objectFieldofView){
 				camera.fieldOfView-=smoothspeed;
 
 			}
 
 			camera.transform.LookAt(SelectedGameObject.transform);
 
+			objScreenPos=camera.WorldToScreenPoint (SelectedGameObject.transform.position);
+
+			objScreenPos = new Vector2 (Mathf.Ceil(objScreenPos.x)+44, Mathf.Ceil(objScreenPos.y)-44);
+			Debug.Log ( Mathf.Ceil(objScreenPos.y));
 		}
-
-
-
-
 			
-
-	
 	
 	}
 
 
-
+	void OnGUI(){
+		
+		GUI.Button (new Rect(Screen.width/2+44,Screen.height/2-44,40,40),SelectedGameObject.tag);
+	
+	
+	
+	
+	}
 
 	// callback to be called after any camera finishes rendering
 	public void MyPostRender(Camera cam)
