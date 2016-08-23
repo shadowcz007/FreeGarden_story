@@ -5,10 +5,36 @@ using System.Collections;
 
 
 // This script will spam the console with finger info
-public class SimpleInfo : MonoBehaviour
-{	
+public class CameraController : MonoBehaviour
+{	public GameObject IslandUI;
 	public Camera camera;
+
+	[Tooltip("The minimum field of view angle we want to zoom to")]
+	public float Minimum = 20.0f;
+
+	[Tooltip("The maximum field of view angle we want to zoom to")]
+	public float Maximum = 300.0f;
+
+
 	public float Distance = 10.0f;
+	[Tooltip("The minimum X position")]
+	public float MinX = -200.0f;
+
+	[Tooltip("The maximum X position")]
+	public float MaxX = 200.0f;
+
+	[Tooltip("The minimum Y position")]
+	public float MinY = -150.0f;
+
+	[Tooltip("The maximum Y position")]
+	public float MaxY = 500.0f;
+
+	[Tooltip("The minimum Z position")]
+	public float MinZ = -500.0f;
+
+	[Tooltip("The maximum Z position")]
+	public float MaxZ = 0.0f;
+
 	[Tooltip("This stores the layers we want the raycast to hit (make sure this GameObject's layer is included!)")]
 	public LayerMask LayerMask = UnityEngine.Physics.DefaultRaycastLayers;
 
@@ -18,9 +44,9 @@ public class SimpleInfo : MonoBehaviour
 
 	public GameObject prefab; 
 
-	public float objectFieldofView=20.0f;
 
-	public float cameraRotateSpeed=20.0f;
+
+	public float cameraRotateSpeed=2.0f;
 
 	public Color selectedColor=Color.red;
 
@@ -30,110 +56,83 @@ public class SimpleInfo : MonoBehaviour
 
 	private Vector3 targetPosition ;
 
+	private GameObject clone;
 
 	void Awake(){
 
+	//	camera=Camera.main;
 
-	
 	}
 
 	void Start(){
 
-
-		//Static Variables
-		Debug.Log (Camera.allCameras.Length);// Returns all enabled cameras in the scene,==allCameraCount
-		Debug.Log (Camera.allCamerasCount);
-		Debug.Log (Camera.current);//The camera we are currently rendering with, for low-level render control only (Read Only).
-		Debug.Log (Camera.main);//The first enabled camera tagged "MainCamera" (Read Only).
-		Debug.Log (Camera.onPostRender);//Event that is fired after any camera finishes rendering.
-		Debug.Log (Camera.onPreCull);//Event that is fired before any camera starts culling.
-		Debug.Log (Camera.onPreRender);//Event that is fired before any camera starts rendering.
-
-		//variables
-
-		Debug.Log (camera.actualRenderingPath);
-		Debug.Log (camera.aspect);//The aspect ratio (width divided by height).
-		Debug.Log (camera.backgroundColor);
-		Debug.Log (camera.cameraToWorldMatrix);
-		Debug.Log (camera.cameraType);
-		Debug.Log (camera.clearFlags);
-		Debug.Log (camera.clearStencilAfterLightingPass);
-		Debug.Log (camera.commandBufferCount);
-		Debug.Log (camera.cullingMask);
-		Debug.Log (camera.cullingMatrix);
-		Debug.Log (camera.depth);
-		Debug.Log (camera.depthTextureMode);
-		Debug.Log (camera.eventMask);
-		Debug.Log (camera.farClipPlane);
-		Debug.Log ("fieldofview"+camera.fieldOfView);
-		Debug.Log (camera.hdr);
-		Debug.Log (camera.layerCullDistances);
-		Debug.Log (camera.layerCullSpherical);
-		Debug.Log (camera.nearClipPlane);
-		Debug.Log (camera.nonJitteredProjectionMatrix);
-		Debug.Log (camera.opaqueSortMode);
-		Debug.Log (camera.orthographic);
-		Debug.Log (camera.orthographicSize);
-		Debug.Log (camera.pixelHeight);
-		Debug.Log (camera.pixelRect);
-		Debug.Log (camera.pixelWidth);
-		Debug.Log (camera.projectionMatrix);
-		Debug.Log (camera.rect);
-		Debug.Log (camera.renderingPath);
-		Debug.Log (camera.stereoConvergence);
-		Debug.Log (camera.stereoEnabled);
-		Debug.Log (camera.stereoMirrorMode);
-		Debug.Log (camera.stereoSeparation);
-		Debug.Log (camera.stereoTargetEye);
-		Debug.Log ("targetDisplay"+camera.targetDisplay);
-		Debug.Log (camera.targetTexture);
-		Debug.Log (camera.transparencySortMode);
-		Debug.Log (camera.useOcclusionCulling);
-		Debug.Log (camera.velocity);
-		Debug.Log (camera.worldToCameraMatrix);
-
-
-		//Public Functions
-
-		Debug.Log (camera.transform.position);
-
-
-
-
+	
 
 	}
 
 	void Update(){
-
+		Debug.Log ("fieldofview"+camera.fieldOfView);
 
 		if(SelectedGameObject){
-			
+
 			camera.transform.RotateAround(SelectedGameObject.transform.position, Vector3.up, cameraRotateSpeed * Time.deltaTime);
 
-			if(camera.fieldOfView>objectFieldofView){
-				camera.fieldOfView-=smoothspeed;
-
-			}
 
 			camera.transform.LookAt(SelectedGameObject.transform);
 
 			objScreenPos=camera.WorldToScreenPoint (SelectedGameObject.transform.position);
 
 			objScreenPos = new Vector2 (Mathf.Ceil(objScreenPos.x)+44, Mathf.Ceil(objScreenPos.y)-44);
-		//	Debug.Log ( Mathf.Ceil(objScreenPos.y));
+			//	Debug.Log ( Mathf.Ceil(objScreenPos.y));
 		}
-			
-	
+
+
+
+		
+
+
 	}
 
+	protected virtual void LateUpdate()
+	{
+		// Make sure the pinch scale is valid
+		if (Lean.LeanTouch.PinchScale > 0.0f) {
+			// Store the old size in a temp variable
+			var orthographicSize = camera.orthographicSize;
+
+			// Scale the size based on the pinch scale
+			orthographicSize /= Lean.LeanTouch.PinchScale;
+
+			// Clamp the size to out min/max values
+			orthographicSize = Mathf.Clamp(orthographicSize, Minimum, Maximum);
+
+			// Set the new size
+			camera.orthographicSize = orthographicSize;
+		} 
+		// Does the main camera exist?
+
+			// Store the current camera position in a temp variable
+		var worldPosition = camera.transform.position;
+
+			// Modify the world position by the delta world position of all fingers
+			worldPosition -= Lean.LeanTouch.GetDeltaWorldPosition(10.0f);
+
+			// Clamp on all axes
+			worldPosition.x = Mathf.Clamp(worldPosition.x, MinX, MaxX);
+			worldPosition.y = Mathf.Clamp(worldPosition.y, MinY, MaxY);
+			worldPosition.z = Mathf.Clamp(worldPosition.z, MinZ, MaxZ);
+
+			// Set the new world position
+		camera.transform.position = worldPosition;
+
+	}
 
 	void OnGUI(){
 		
-		GUI.Button (new Rect(Screen.width/2+44,Screen.height/2-44,40,40),SelectedGameObject.tag);
-	
-	
-	
-	
+		 
+
+
+
 	}
 
 	// callback to be called after any camera finishes rendering
@@ -147,145 +146,184 @@ public class SimpleInfo : MonoBehaviour
 	protected virtual void OnEnable()
 	{
 		// Hook events
+		Lean.LeanTouch.OnFingerTap      += OnFingerTap;
+		//Lean.LeanTouch.OnFingerHeldSet  += OnFingerHeld;
+		/*
 		Lean.LeanTouch.OnFingerDown     += OnFingerDown;
 		Lean.LeanTouch.OnFingerSet      += OnFingerSet;
 		Lean.LeanTouch.OnFingerUp       += OnFingerUp;
 		Lean.LeanTouch.OnFingerDrag     += OnFingerDrag;
-		Lean.LeanTouch.OnFingerTap      += OnFingerTap;
+
+
 		Lean.LeanTouch.OnFingerSwipe    += OnFingerSwipe;
 		Lean.LeanTouch.OnFingerHeldDown += OnFingerHeldDown;
-		Lean.LeanTouch.OnFingerHeldSet  += OnFingerHeld;
+
+Lean.LeanTouch.OnPinch          += OnPinch;
+
 		Lean.LeanTouch.OnFingerHeldUp   += OnFingerHeldUp;
 		Lean.LeanTouch.OnMultiTap       += OnMultiTap;
 		Lean.LeanTouch.OnDrag           += OnDrag;
 		Lean.LeanTouch.OnSoloDrag       += OnSoloDrag;
 		Lean.LeanTouch.OnMultiDrag      += OnMultiDrag;
-		Lean.LeanTouch.OnPinch          += OnPinch;
+
 		Lean.LeanTouch.OnTwistDegrees   += OnTwistDegrees;
 		Lean.LeanTouch.OnTwistRadians   += OnTwistRadians;
+*/
 
 		// register the callback when enabling object
 		Camera.onPostRender += MyPostRender;
 	}
-	
+
 	protected virtual void OnDisable()
 	{
 		// Unhook events
+		Lean.LeanTouch.OnFingerTap      -= OnFingerTap;
+	//	Lean.LeanTouch.OnFingerHeldSet  -= OnFingerHeld;
+
+		/*
 		Lean.LeanTouch.OnFingerDown     -= OnFingerDown;
 		Lean.LeanTouch.OnFingerSet      -= OnFingerSet;
 		Lean.LeanTouch.OnFingerUp       -= OnFingerUp;
 		Lean.LeanTouch.OnFingerDrag     -= OnFingerDrag;
-		Lean.LeanTouch.OnFingerTap      -= OnFingerTap;
+
 		Lean.LeanTouch.OnFingerSwipe    -= OnFingerSwipe;
 		Lean.LeanTouch.OnFingerHeldDown -= OnFingerHeldDown;
-		Lean.LeanTouch.OnFingerHeldSet  -= OnFingerHeld;
+Lean.LeanTouch.OnPinch          -= OnPinch;
 		Lean.LeanTouch.OnFingerHeldUp   -= OnFingerHeldUp;
 		Lean.LeanTouch.OnMultiTap       -= OnMultiTap;
 		Lean.LeanTouch.OnDrag           -= OnDrag;
 		Lean.LeanTouch.OnSoloDrag       -= OnSoloDrag;
 		Lean.LeanTouch.OnMultiDrag      -= OnMultiDrag;
-		Lean.LeanTouch.OnPinch          -= OnPinch;
+
 		Lean.LeanTouch.OnTwistDegrees   -= OnTwistDegrees;
 		Lean.LeanTouch.OnTwistRadians   -= OnTwistRadians;
+*/
 
 		// remove the callback when disabling object
 		Camera.onPostRender -= MyPostRender;
 	}
-	
+	/*
 	public void OnFingerDown(Lean.LeanFinger finger)
 	{
 		Debug.Log("Finger " + finger.Index + " began touching the screen");
 	}
-	
+
 	public void OnFingerSet(Lean.LeanFinger finger)
 	{
 		Debug.Log("Finger " + finger.Index + " is still touching the screen");
 	}
-	
+
 	public void OnFingerUp(Lean.LeanFinger finger)
 	{
 		Debug.Log("Finger " + finger.Index + " finished touching the screen");
 	}
-	
+
 	public void OnFingerDrag(Lean.LeanFinger finger)
 	{
 		Debug.Log("Finger " + finger.Index + " moved " + finger.DeltaScreenPosition + " pixels across the screen");
 	}
-	/*
+
 	public void OnFingerTap(Lean.LeanFinger finger)
 	{
 		Debug.Log("Finger " + finger.Index + " tapped the screen");
 	}
-	*/
+
 	public void OnFingerSwipe(Lean.LeanFinger finger)
 	{
 		Debug.Log("Finger " + finger.Index + " swiped the screen");
 	}
-	
+
 	public void OnFingerHeldDown(Lean.LeanFinger finger)
 	{
 		Debug.Log("Finger " + finger.Index + "长按 began touching the screen for a long time");
 	}
-	
+*/
+	/*
 	public void OnFingerHeld(Lean.LeanFinger finger)
 	{
 
-		for (int i = 0; i < 10; i++)
-			Instantiate(prefab, new Vector3(i * 2.0f, 0, 0), Quaternion.identity);
 
 
+		// Does the prefab exist?
+		if (prefab != null)
+		{
+			// Make sure the finger isn't over any GUI elements
+			if (finger.IsOverGui == false)
+			{
+				// Clone the prefab, and place it where the finger was tapped
+
+				var screenpos = finger.ScreenPosition;
+				var vector3screenpos = new Vector3 (screenpos.x, 0, screenpos.y);
+				 
+				var position = vector3screenpos;
+				Debug.Log (position);
+				var rotation = Quaternion.identity;
+
+				if (!clone) {
+				
+					clone = (GameObject)Instantiate(prefab, position, rotation);
+					Debug.Log (clone);
+					// Make sure the prefab gets destroyed after some time
+					//Destroy(clone);
+				}
+
+			}
+		}
 
 
 		Debug.Log("Finger " + finger.Index + " is still touching the screen for a long time");
 	}
-	
+
+	*/
+
+	/*
 	public void OnFingerHeldUp(Lean.LeanFinger finger)
 	{
 		Debug.Log("Finger " + finger.Index + " stopped touching the screen for a long time");
 	}
-	
+
 	public void OnMultiTap(int fingerCount)
 	{
 		Debug.Log("The screen was just tapped by " + fingerCount + " finger(s)");
 	}
-	
+
 	public void OnDrag(Vector2 pixels)
 	{
 		Debug.Log("One or many fingers moved " + pixels + " across the screen");
 	}
-	
+
 	public void OnSoloDrag(Vector2 pixels)
 	{
 		Debug.Log("One finger moved " + pixels + " across the screen");
 	}
-	
+
 	public void OnMultiDrag(Vector2 pixels)
 	{
 		Debug.Log("Many fingers moved " + pixels + " across the screen");
 	}
-	
+
 	public void OnPinch(float scale)
 	{
 		Debug.Log("Many fingers pinched " + scale + " percent");
 	}
-	
+
 	public void OnTwistDegrees(float angle)
 	{
 		Debug.Log("Many fingers twisted " + angle + " degrees");
 
 	}
-	
+
 	public void OnTwistRadians(float angle)
 	{
 		Debug.Log("Many fingers twisted " + angle + " radians");
 
 	}
-
+*/
 
 	//
 	public void OnFingerTap(Lean.LeanFinger finger)
 	{
-		
+
 		// Raycast information
 		var ray = finger.GetRay();
 		var hit = default(RaycastHit);
@@ -299,11 +337,18 @@ public class SimpleInfo : MonoBehaviour
 			}
 
 			SelectedGameObject = hit.collider.gameObject;
-
+			openIslandUI ();
 
 			OutlineColorGameObject(SelectedGameObject,selectedColor);
 		}
 	}
+
+	public void openIslandUI(){
+		IslandUI.SetActive (true);
+	
+	
+	}
+
 
 	private static void OutlineColorGameObject(GameObject gameObject, Color color)
 	{
