@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>  
 <object>
 <messages id="show">
-<contents name=""></contents>
+ 
 
 
 </messages>
 <messages id="info">
 <contents name="Achelousaurus"  zh="河神龙">又名阿奇洛龙，是尖角龙亚科下的一个属，生活在下白垩纪的北美洲，属于中型的角龙，身长约有6米。它是四足的草食性恐龙，有著像鹦鹉的喙，在鼻端及眼睛背后有隆起的部份，在颈的绉边末端有两只角。</contents>
-<contents name="Apatosaurus"  zh=""></contents>
-<contents name="Aucasaurus"  zh=""></contents>
-<contents name="Brachiosaurus"  zh=""></contents>
-<contents name="Brontotherium"  zh=""></contents>
-<contents name="Ceratosaurus"  zh=""></contents>
+<contents name="Apatosaurus"  zh="迷惑龙">梁龙科迷惑龙属，包括埃阿斯迷惑龙（A. ajax）和路氏迷惑龙（A. louisae）。重量达30吨，据阿根廷新发现的恐龙大腿骨头，身高为4-5.5米高，身长为35米左右。</contents>
+<contents name="Aucasaurus"  zh="奥卡龙">奥卡龙是根据1999年在阿根廷发现的一具几乎完整的化石命名的，最独特之处是其头部有非角状的肿块。是目前最完整的阿贝力龙科恐龙。根据唯一化石显示，奥卡龙臀高1.7米，体长5米，体重750千克。奥卡龙主要特征包括：长腿、比例上短而高的头颅骨、粗壮的身体。奥卡龙经过研究发现属阿贝力龙科玛君龙亚科食肉牛龙族，是著名的食肉牛龙的最近亲。</contents>
+<contents name="Brachiosaurus"  zh="腕龙">是蜥脚下目的一属恐龙，生活于晚侏罗纪，它的名字是由古希腊文的“βραχιων”（前臂）及“σαυρος”（蜥蜴）结合而来，因它的前肢比起后肢大很多。腕龙是曾经生活在陆地上的最大的动物之一，亦是所有最有名的恐龙之一。侏罗纪晚期的巨大草食性恐龙，名字的原意</contents>
+<contents name="Brontotherium"  zh="王雷兽">是一属已灭绝的奇蹄目哺乳动物，属于雷兽科。它们生存于始新世晚期的北美洲。王雷兽肩高2.5米，外观像犀牛，鼻上拥有一个叉状像角的突出物</contents>
+<contents name="Ceratosaurus"  zh="角鼻龙">在侏罗纪晚期，很凶残的的食肉恐龙——角鼻龙，从外形上看，它与其他的食肉恐龙没有太大区别，都是大头，粗腰，长尾，双脚行走，前肢短小，上下颌强健，嘴里布满尖利而弯曲</contents>
 
 </messages>
 
