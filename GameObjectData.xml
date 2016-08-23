@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<object>
+<messages id="show">
+<contents name=""></contents>
+
+
+</messages>
+<messages id="info">
+<contents name="Achelousaurus"  zh="河神龙">又名阿奇洛龙，是尖角龙亚科下的一个属，生活在下白垩纪的北美洲，属于中型的角龙，身长约有6米。它是四足的草食性恐龙，有著像鹦鹉的喙，在鼻端及眼睛背后有隆起的部份，在颈的绉边末端有两只角。</contents>
+<contents name="Apatosaurus"  zh=""></contents>
+<contents name="Aucasaurus"  zh=""></contents>
+<contents name="Brachiosaurus"  zh=""></contents>
+<contents name="Brontotherium"  zh=""></contents>
+<contents name="Ceratosaurus"  zh=""></contents>
+
+</messages>
+
+
+</object>
