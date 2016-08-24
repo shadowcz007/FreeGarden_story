@@ -18,7 +18,7 @@ namespace Vuforia
         #region PRIVATE_MEMBER_VARIABLES
  
         private TrackableBehaviour mTrackableBehaviour;
-        public Transform objectTransform;
+        //public Transform objectTransform;
 		public GameObject foundGameObject;
 		public string FoundName ;
 
@@ -48,28 +48,54 @@ namespace Vuforia
         /// Implementation of the ITrackableEventHandler function called when the
         /// tracking state changes.
         /// </summary>
-        public void OnTrackableStateChanged(
-                                        TrackableBehaviour.Status previousStatus,
-                                        TrackableBehaviour.Status newStatus)
-        {
+        public void OnTrackableStateChanged(TrackableBehaviour.Status previousStatus,
+                                        TrackableBehaviour.Status newStatus) {
             if (newStatus == TrackableBehaviour.Status.DETECTED ||
                 newStatus == TrackableBehaviour.Status.TRACKED ||
-                newStatus == TrackableBehaviour.Status.EXTENDED_TRACKED)
-            {
+                newStatus == TrackableBehaviour.Status.EXTENDED_TRACKED){
                 OnTrackingFound();
-                StopAllCoroutines();//关闭所有协同程序
-                StartCoroutine(MoveUp());//开启特定的协同程序
+               // StopAllCoroutines();//关闭所有协同程序
+               // StartCoroutine(MoveUp());//开启特定的协同程序
             }
-            else
-            {
-                OnTrackingLost();
+            else{
+				StartCoroutine(WaitTimeOnTrackingLost());
+
             }
         }
 
         #endregion // PUBLIC_METHODS
 
+		IEnumerator WaitTimeOnTrackingLost() {
+			print(Time.time);
+			yield return new WaitForSeconds(5);
+			print(Time.time);
+
+			Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
+			Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
+
+			// Disable rendering:
+			foreach (Renderer component in rendererComponents)
+			{
+				component.enabled = false;
+			}
+
+			// Disable colliders:
+			foreach (Collider component in colliderComponents)
+			{
+				component.enabled = false;
+			}
+
+			Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " lost");
+
+
+
+			foundGameObject.transform.SetParent(foundParent);
+			foundGameObject.SetActive (false);
+
+		}
 
         //sphere上升控制
+		/*
         IEnumerator MoveUp() 
         {
             objectTransform.transform.localPosition = new Vector3(0,-2,0);
@@ -80,9 +106,9 @@ namespace Vuforia
             }
         }
 
+*/
 
-
-        #region PRIVATE_METHODS
+     
 
 
         private void OnTrackingFound()
@@ -107,43 +133,17 @@ namespace Vuforia
 
 
 			FoundName = mTrackableBehaviour.TrackableName;
-			foundGameObject = GameObject.Find (FoundName);
+			foundGameObject = transform.Find (FoundName).gameObject;
 			foundParent = foundGameObject.transform.parent;
 			Debug.Log (foundGameObject.transform.parent);
 			Transform newParent;
 			newParent = GameObject.Find ("FoundGameObject").transform;
 			foundGameObject.transform.SetParent(newParent);
-
+			foundGameObject.SetActive (true);
         }	
 
+      
 
-
-        private void OnTrackingLost()
-        {
-            Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
-            Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
-
-            // Disable rendering:
-            foreach (Renderer component in rendererComponents)
-            {
-                component.enabled = false;
-            }
-
-            // Disable colliders:
-            foreach (Collider component in colliderComponents)
-            {
-                component.enabled = false;
-            }
-
-            Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " lost");
-
-
-
-			foundGameObject.transform.SetParent(foundParent);
-
-
-        }
-
-        #endregion // PRIVATE_METHODS
+      
     }
 }
