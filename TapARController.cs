@@ -17,20 +17,23 @@ public class TapARController : MonoBehaviour {
 	public GameObject InfoUI; 
 	public GameObject Child;
 	public GameObject AlertUI;
+	public GameObject TitleUI;
+	public GameObject MainUI;
 	private string Childzh="";
 	private string Childcontent="";
 
 	private bool openAlert=true;
+
 	// Use this for initialization
 	void Start () {
-		
+
 	
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
-		
+
+	
 
 
 		if (openAlert) {
@@ -88,12 +91,14 @@ public class TapARController : MonoBehaviour {
 		openAlert = false;
 	
 	}
-	public void OpenInfoUI(){
+	public void AddARcard(){
 		updateXML (Child.name + "_island");
 		UnityEngine.SceneManagement.SceneManager.LoadScene("Vuforia-1-Index");		
 	}
 	public void CloseInfoUI(){
 		InfoUI.SetActive (false);
+		TitleUI.SetActive (false);
+		MainUI.SetActive (true);
 	}
 
 	protected virtual void OnEnable()
@@ -134,12 +139,12 @@ public class TapARController : MonoBehaviour {
 					Debug.Log (Childzh);
 
 					CloseAlertUI ();
+					GameObject.Find ("MainUI").SetActive (false);
+					TitleUI.SetActive (true);
+					TitleUI.transform.position=Child.transform.position;
+					TitleUI.transform.FindChild ("TitleZh").GetComponent<Text> ().text = Childzh;
+					TitleUI.transform.FindChild ("TitleEn").GetComponent<Text> ().text = Child.name;
 
-					InfoUI.transform.FindChild ("zh").GetComponent<Text> ().text = Childzh;
-					InfoUI.transform.FindChild ("en").GetComponent<Text> ().text = Child.name;
-					InfoUI.transform.FindChild ("content").GetComponent<Text> ().text = Childcontent;
-
-					InfoUI.SetActive (true);
 
 				} 
 
@@ -148,7 +153,16 @@ public class TapARController : MonoBehaviour {
 			}
 		}
 	}
-	 
+
+	public void OpenInfoUI(){
+		
+		InfoUI.transform.FindChild ("content").GetComponent<Text> ().text = Childcontent;
+
+		InfoUI.SetActive (true);
+	
+	
+	
+	}
 
 	void updateXML(string name){
 		string path = Application.dataPath + "/Data/GameObjectData.xml";
@@ -158,16 +172,21 @@ public class TapARController : MonoBehaviour {
 			XmlNodeList xmlNodeList = xml.SelectSingleNode("objects").ChildNodes;
 			foreach (XmlElement xl1 in xmlNodeList) {
 				if (xl1.GetAttribute ("id") == "show") {
-											
+
+					foreach(XmlElement xl2 in xl1.ChildNodes){	
+						if(xl2.GetAttribute ("name")==name){
+							xl2.SetAttribute ("display","show");
+						}
+
+					}		
+							/*
 
 							XmlElement elementChild = xml.CreateElement ("contents");
 							elementChild.SetAttribute ("name", name);
 							elementChild.InnerText = name;
-							xl1.AppendChild (elementChild);
-						
-
-					
-
+							xl1.AppendChild (elementChild);	
+							
+							*/
 
 				}
 			}
