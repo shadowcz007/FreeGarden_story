@@ -165,7 +165,7 @@ public class TapARController : MonoBehaviour {
 	}
 
 	void updateXML(string name){
-		string path = Application.dataPath + "/Data/GameObjectData.xml";
+		string path = Application.persistentDataPath + "/DefaultData.xml";
 		if(File.Exists(path)){
 			XmlDocument xml = new XmlDocument();
 			xml.Load(path);
@@ -180,7 +180,6 @@ public class TapARController : MonoBehaviour {
 
 					}		
 							/*
-
 							XmlElement elementChild = xml.CreateElement ("contents");
 							elementChild.SetAttribute ("name", name);
 							elementChild.InnerText = name;
@@ -200,10 +199,9 @@ public class TapARController : MonoBehaviour {
 		zh = "";
 		content="";
 		//创建xml文档
-		XmlDocument xml = new XmlDocument();
-		XmlReaderSettings set = new XmlReaderSettings();
-		set.IgnoreComments = true;//这个设置是忽略xml注释文档的影响。有时候注释会影响到xml的读取
-		xml.Load(XmlReader.Create((Application.dataPath+"/Data/GameObjectData.xml"),set));
+		TextAsset m_XmlTextAsset = Resources.Load ("DefaultData") as TextAsset;
+		XmlDocument xml = loadXmlnew (m_XmlTextAsset);
+
 		//得到objects节点下的所有子节点
 		XmlNodeList xmlNodeList = xml.SelectSingleNode("objects").ChildNodes;
 		//遍历所有子节点
@@ -230,6 +228,26 @@ public class TapARController : MonoBehaviour {
 		}
 
 
+	}
+
+	public XmlDocument  loadXmlnew(TextAsset xmlFile){
+		MemoryStream assetStream = new MemoryStream(xmlFile.bytes);
+		XmlReader reader = XmlReader.Create(assetStream);
+		XmlDocument xmlDoc = new XmlDocument();
+		try
+		{
+			xmlDoc.Load(reader);
+		}
+		catch (XmlException ex)
+		{
+			Debug.Log("读取错误 "+ xmlFile.name + ":\n" + ex);
+		}
+		finally
+		{
+			Debug.Log(xmlFile.name + " 已读取");
+		}
+
+		return xmlDoc;
 	}
 
 
