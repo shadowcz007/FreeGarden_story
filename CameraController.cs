@@ -1,12 +1,16 @@
 using UnityEngine;
 using System.Collections;
+using System.Xml;
+using System.IO;
 
-
-
+using UnityEngine.UI;
 
 // This script will spam the console with finger info
 public class CameraController : MonoBehaviour
 {	public GameObject IslandUI;
+	private string islandName;
+	private string islandValue;
+
 	public Camera camera;
 
 	[Tooltip("The minimum field of view angle we want to zoom to")]
@@ -14,7 +18,6 @@ public class CameraController : MonoBehaviour
 
 	[Tooltip("The maximum field of view angle we want to zoom to")]
 	public float Maximum = 300.0f;
-
 
 	public float Distance = 10.0f;
 	[Tooltip("The minimum X position")]
@@ -40,7 +43,7 @@ public class CameraController : MonoBehaviour
 
 	[Tooltip("The previously selected GameObject")]
 
-	private GameObject SelectedGameObject;
+	public GameObject SelectedGameObject;
 
 	public GameObject prefab; 
 
@@ -71,7 +74,7 @@ public class CameraController : MonoBehaviour
 	}
 
 	void Update(){
-		Debug.Log ("fieldofview"+camera.fieldOfView);
+	//	Debug.Log ("fieldofview"+camera.fieldOfView);
 
 		if(SelectedGameObject){
 
@@ -88,7 +91,7 @@ public class CameraController : MonoBehaviour
 
 
 
-		
+	
 
 
 	}
@@ -127,10 +130,7 @@ public class CameraController : MonoBehaviour
 
 	}
 
-	void OnGUI(){
-		
-		 
-
+	void OnGUI(){		 
 
 
 	}
@@ -323,30 +323,71 @@ Lean.LeanTouch.OnPinch          -= OnPinch;
 	//
 	public void OnFingerTap(Lean.LeanFinger finger)
 	{
+		if(finger.TapCount>0){
+			// Raycast information
+			var ray = finger.GetRay();
+			var hit = default(RaycastHit);
 
-		// Raycast information
-		var ray = finger.GetRay();
-		var hit = default(RaycastHit);
+			// Was this finger pressed down on a collider?
+			if (Physics.Raycast(ray, out hit, float.PositiveInfinity, LayerMask) == true)
+			{
+				// Remove the color from the currently selected one?
+				if (SelectedGameObject != null) {
+					OutlineColorGameObject (SelectedGameObject, Color.black);
 
-		// Was this finger pressed down on a collider?
-		if (Physics.Raycast(ray, out hit, float.PositiveInfinity, LayerMask) == true)
-		{
-			// Remove the color from the currently selected one?
-			if (SelectedGameObject != null) {
-				OutlineColorGameObject (SelectedGameObject, Color.black);
+				}
+				SelectedGameObject = hit.collider.gameObject;
+				openIslandUI ();
+
+				OutlineColorGameObject(SelectedGameObject,selectedColor);
+				Debug.Log (SelectedGameObject);
+
 			}
 
-			SelectedGameObject = hit.collider.gameObject;
-			openIslandUI ();
 
-			OutlineColorGameObject(SelectedGameObject,selectedColor);
 		}
+
 	}
 
 	public void openIslandUI(){
-		IslandUI.SetActive (true);
-	
-	
+		Debug.Log ("openislandUI");
+		Debug.Log (SelectedGameObject.transform.parent.gameObject.name);
+		IslandUI.SetActive (true);	
+		IslandUI.transform.FindChild ("IslandName").GetComponent<Text> ().text = "";
+		ReturnPerLoadXml (SelectedGameObject.transform.parent.gameObject.name);
+
+		IslandUI.transform.FindChild("IslandName").GetComponent<Text>().text=islandName;
+		IslandUI.transform.FindChild ("Percent").GetComponent<Slider> ().value = float.Parse(islandValue);
+	}
+
+
+	public void ReturnPerLoadXml(string name){
+		name = name.Replace ("(Clone)", "");
+		string path =  Application.persistentDataPath + "/DefaultData.xml";
+		if(File.Exists(path)){
+			XmlDocument xml = new XmlDocument();
+			xml.Load(path);
+			XmlNodeList xmlNodeList = xml.SelectSingleNode("objects").ChildNodes;
+			foreach(XmlElement xl1 in xmlNodeList){
+				if(xl1.GetAttribute("id")=="show"){
+					foreach(XmlElement xl2 in xl1.ChildNodes){
+								
+						if (xl2.GetAttribute ("name") == name) {
+							islandName = xl2.GetAttribute ("name");
+							islandValue = xl2.GetAttribute ("per");
+							Debug.Log (islandName+"islandValue"+islandValue);
+						} else if(name=="cloud") {
+							islandName = "cloud";
+							islandValue ="0";
+							IslandUI.SetActive (false);	
+						
+						}
+					}
+				}
+			}
+		
+		}
+	 
 	}
 
 
