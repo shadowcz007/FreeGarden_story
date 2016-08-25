@@ -1,33 +1,20 @@
- 
-/*===============================================================================
- 
-===============================================================================*/
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using Vuforia;
 
 public class MainUIConstrol : MonoBehaviour
 {
 	
-	#region PRIVATE_MEMBERS
 	private CameraSettings mCamSettings = null;
 	private TrackableSettings mTrackableSettings = null;
 	private MenuAnimator mMenuAnim = null;
-	#endregion //PRIVATE_MEMBERS
-
 
 	private ArrayList Adialogue=new ArrayList();
 	private ArrayList Bdialogue=new ArrayList();
 
 
-
-
-
-
 	public GameObject MenuUI;
-
-
-
 
 
 	protected virtual void Start()
@@ -36,10 +23,7 @@ public class MainUIConstrol : MonoBehaviour
 		mTrackableSettings = FindObjectOfType<TrackableSettings>();
 		mMenuAnim = FindObjectOfType<MenuAnimator>();
 
-
 	}
-
-
 
 
 
@@ -70,9 +54,6 @@ public class MainUIConstrol : MonoBehaviour
 	}
 
 
-
-
-
 	public void OpenMenu(){
 		MenuUI.SetActive (true);
 
@@ -86,9 +67,6 @@ public class MainUIConstrol : MonoBehaviour
 
 
 
-
-
-	#region PUBLIC_METHODS
 	public void ShowIndexPage()
 	{
 		#if (UNITY_5_2 || UNITY_5_1 || UNITY_5_0)
@@ -143,7 +121,7 @@ public class MainUIConstrol : MonoBehaviour
 	public void SelectCamera(bool front)
 	{
 		if (mCamSettings)
-		//	mCamSettings.SelectCamera(front ? CameraDevice.CameraDirection.CAMERA_FRONT : CameraDevice.CameraDirection.CAMERA_BACK);
+			mCamSettings.SelectCamera(front ? CameraDevice.CameraDirection.CAMERA_FRONT : CameraDevice.CameraDirection.CAMERA_BACK);
 
 		CloseMenu();
 	}
@@ -201,18 +179,12 @@ public class MainUIConstrol : MonoBehaviour
 			mMenuAnim.Hide();
 	}
 	*/
-	#endregion //PUBLIC_METHODS
-
-
-
 
 
 	public void OnStartAR(){
 		Debug.Log("Starttt");
 		UnityEngine.SceneManagement.SceneManager.LoadScene("Vuforia-2-Loading");
 	}
-
-
 
 
 	#region PROTECTED_METHODS
@@ -228,4 +200,13 @@ public class MainUIConstrol : MonoBehaviour
 		return null;
 	}
 	#endregion //PROTECTED_METHODS
+
+
+
+
+	public void share(){
+	
+	
+	
+	}
 }
