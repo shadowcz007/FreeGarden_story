@@ -1,21 +1,25 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.IO;
+using System.Xml;
 
 public class GameTime : MonoBehaviour {
-	
+	public GameObject IslandUI;
+	public GameObject progress;
 	// Use this for initialization
 	//之前的一个时间点  
-	public long startTime = 1435870304;  
+	public long startTime = 15870304;  
 	//限定时间秒  
-	private long fixedTime = 200000;  
+	private long fixedTime = 86000;  //timeStamp DateStringFromNow()转化为时间
+
 	private long nowTime;  
 
+	public float IslandPertimer = 10.0f;
 
 	bool isOver = false;  
 
-	public string dt;//timeStamp DateStringFromNow()转化为时间
-
+	private float IslandPer;
 
 	// Use this for initialization  
 	void Start() {  
@@ -28,22 +32,62 @@ public class GameTime : MonoBehaviour {
 
 	// Update is called once per frame  
 	void Update(){  
-		if (!isOver && nowTime - startTime >= fixedTime)  
-		{  
+		if (!isOver && nowTime - startTime >= fixedTime){  
 			Debug.Log("倒计时结束");  
 			isOver = true;  
-		}  
+		} 
+
+		IslandPertimer-= Time.deltaTime;
+
+		if ( IslandPertimer <= 0 &&IslandPer<100.0f) {
+			IslandPer += 1.0f;
+			updateXML (IslandPer.ToString ());
+			IslandUI.transform.FindChild ("Percent").GetComponent<Slider> ().value = IslandPer;
+			progress.GetComponent <Text> ().text = IslandPer.ToString ()+"%";
+
+			IslandPertimer = 10.0f;
+		}
+
+
 	}  
 
 
-	void CountDown()  
-	{  
-		fixedTime -= 1;  
-		gameObject.GetComponent<Text>().text = (fixedTime / (60 * 60 * 24)).ToString() + "天"  
-			+ ((fixedTime / 60 - fixedTime / (60 * 60 * 24) * 24 * 60) / 60).ToString() + "小时"  
+	void CountDown(){  
+		
+		gameObject.GetComponent <Text> ().text = ((fixedTime / 60 - fixedTime / (60 * 60 * 24) * 24 * 60) / 60).ToString() + "小时"  
 			+ ((fixedTime / 60) % 60).ToString() + "分"  
-			+ (fixedTime % 60).ToString() + "秒";  
+			+ (fixedTime % 60).ToString() + "秒";
+		fixedTime -= 1;  
+		/*
+		 * fixedTime / (60 * 60 * 24)).ToString() + "天"  
+			+ 
+		gameObject.GetComponent<Text>().text =DateStringFromNow (fixedTime.ToString ());
+		*/
+
 	} 
+
+	void updateXML(string time){
+		string path = Application.persistentDataPath + "/DefaultData.xml";
+		if(File.Exists(path)){
+			XmlDocument xml = new XmlDocument();
+			xml.Load(path);
+			XmlNodeList xmlNodeList = xml.SelectSingleNode("objects").ChildNodes;
+			foreach (XmlElement xl1 in xmlNodeList) {
+				if (xl1.GetAttribute ("id") == "show") {
+
+					foreach(XmlElement xl2 in xl1.ChildNodes){	
+						if(xl2.GetAttribute ("display")=="show"){
+							xl2.SetAttribute ("per",time);
+						}
+
+					}		
+
+				}
+			}
+
+			xml.Save(path);
+		}
+	}
 
 
 	public string DateStringFromNow(string dt) { 
