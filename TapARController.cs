@@ -6,7 +6,7 @@ using Vuforia;
 using UnityEngine.UI;
 
 public class TapARController : MonoBehaviour {
-
+	
 
 	[Tooltip("The prefab that gets spawned upon clicking")]
 	public GameObject Prefab;
@@ -24,16 +24,22 @@ public class TapARController : MonoBehaviour {
 
 	private bool openAlert=true;
 
+	private bool RBool = false;
+
 	// Use this for initialization
 	void Start () {
-
+		
 	
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
-	
+		if(transform.childCount>0){
+
+			openAlert = false;
+
+		}
 
 
 		if (openAlert) {
@@ -44,6 +50,12 @@ public class TapARController : MonoBehaviour {
 			AlertUI.SetActive (false);
 		
 		
+		}
+
+		if(RBool){
+
+			RotationObject ();
+
 		}
 
 
@@ -85,36 +97,20 @@ public class TapARController : MonoBehaviour {
 		*/
 	}
 
-	public void CloseAlertUI(){
-		AlertUI.SetActive (false);
-		Debug.Log ("click close");
-		openAlert = false;
-	
-	}
-	public void AddARcard(){
-		updateXML (Child.name + "_island");
-		UnityEngine.SceneManagement.SceneManager.LoadScene("Vuforia-1-Index");		
-	}
-	public void CloseInfoUI(){
-		InfoUI.SetActive (false);
-		TitleUI.SetActive (false);
-		MainUI.SetActive (true);
-	}
-
-	protected virtual void OnEnable()
-	{
+	protected virtual void OnEnable(){
 		// Hook into the OnFingerTap event
 		Lean.LeanTouch.OnFingerTap += OnFingerTap;
 	}
 
-	protected virtual void OnDisable()
-	{
+	protected virtual void OnDisable(){
 		// Unhook into the OnFingerTap event
 		Lean.LeanTouch.OnFingerTap -= OnFingerTap;
 	}
 
-	public void OnFingerTap(Lean.LeanFinger finger)
-	{
+
+
+
+	public void OnFingerTap(Lean.LeanFinger finger){
 		// Does the prefab exist?
 		if (Prefab != null){
 			// Make sure the finger isn't over any GUI elements
@@ -133,17 +129,14 @@ public class TapARController : MonoBehaviour {
 					Child = this.gameObject.transform.GetChild (0).gameObject;
 
 
-
 					LoadXml (out Childzh, out Childcontent, Child.name);
 
-					Debug.Log (Childzh);
 
 					CloseAlertUI ();
-					GameObject.Find ("MainUI").SetActive (false);
-					TitleUI.SetActive (true);
-					TitleUI.transform.position=Child.transform.position;
-					TitleUI.transform.FindChild ("TitleZh").GetComponent<Text> ().text = Childzh;
-					TitleUI.transform.FindChild ("TitleEn").GetComponent<Text> ().text = Child.name;
+
+
+					OpenTitleUI ();
+
 
 
 				} 
@@ -154,15 +147,60 @@ public class TapARController : MonoBehaviour {
 		}
 	}
 
-	public void OpenInfoUI(){
+
+	public void AddARcard(){
+		updateXML (Child.name + "_island");
+		UnityEngine.SceneManagement.SceneManager.LoadScene("Vuforia-1-Index");		
+	}
+
+	public void OpenTitleUI(){
 		
+		GameObject.Find ("MainUI").SetActive (false);
+		TitleUI.SetActive (true);
+		TitleUI.transform.position=Child.transform.position;
+		TitleUI.transform.FindChild ("TitleZh").GetComponent<Text> ().text = Childzh;
+		TitleUI.transform.FindChild ("TitleEn").GetComponent<Text> ().text = Child.name;
+	
+		RBool = true;
+	}
+
+	public void RotationObject(){
+		GameObject RotationObject=GameObject.Find ("Clone");
+		RotationObject.transform.Rotate (new Vector3(0,1,0));
+	}
+	public void CloseAlertUI(){
+		AlertUI.SetActive (false);
+		Debug.Log ("click close");
+		openAlert = false;
+	
+	}
+
+	public void CloseInfoUI(){
+		InfoUI.SetActive (false);
+		TitleUI.SetActive (false);
+		MainUI.SetActive (true);
+		RBool = false;
+		GameObject FoundGameObject = GameObject.Find ("FoundGameObject");
+		int fgbint = FoundGameObject.transform.childCount;
+		for(int i=0; i<fgbint; i++){
+
+			Destroy (FoundGameObject.transform.GetChild (i).gameObject);
+		}
+
+	
+	}
+
+	public void OpenInfoUI(){
+
 		InfoUI.transform.FindChild ("content").GetComponent<Text> ().text = Childcontent;
 
 		InfoUI.SetActive (true);
-	
-	
-	
+
+
 	}
+
+
+
 
 	void updateXML(string name){
 		string path = Application.persistentDataPath + "/DefaultData.xml";
