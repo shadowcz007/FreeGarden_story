@@ -3,8 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using Vuforia;
 
-public class MainUIConstrol : MonoBehaviour
-{
+public class MainUIConstrol : MonoBehaviour{
 	
 	private CameraSettings mCamSettings = null;
 	private TrackableSettings mTrackableSettings = null;
@@ -17,8 +16,7 @@ public class MainUIConstrol : MonoBehaviour
 	public GameObject MenuUI;
 
 
-	protected virtual void Start()
-	{
+	protected virtual void Start(){
 		mCamSettings = FindObjectOfType<CameraSettings>();
 		mTrackableSettings = FindObjectOfType<TrackableSettings>();
 		mMenuAnim = FindObjectOfType<MenuAnimator>();
@@ -67,37 +65,31 @@ public class MainUIConstrol : MonoBehaviour
 
 
 
-	public void ShowIndexPage()
-	{
-		#if (UNITY_5_2 || UNITY_5_1 || UNITY_5_0)
-		Application.LoadLevel("Vuforia-1-Index");
-		#else
+	public void ShowIndexPage(){
+		
 		UnityEngine.SceneManagement.SceneManager.LoadScene("Vuforia-1-Index");
-		#endif
-	}
-	public void ShowAboutPage()
-	{
-		#if (UNITY_5_2 || UNITY_5_1 || UNITY_5_0)
-		Application.LoadLevel("Vuforia-4-Tip");
-		#else
-		UnityEngine.SceneManagement.SceneManager.LoadScene("Vuforia-4-Tip");
-		#endif
-	}
 
-	public void ShowTipPage()
-	{
-		#if (UNITY_5_2 || UNITY_5_1 || UNITY_5_0)
-		Application.LoadLevel("Vuforia-5-About");
-		#else
+	}
+	public void ShowAboutPage(){
 		UnityEngine.SceneManagement.SceneManager.LoadScene("Vuforia-5-About");
-		#endif
+
+
+	}
+
+	public void ShowTipPage(){
+		
+		UnityEngine.SceneManagement.SceneManager.LoadScene("Vuforia-4-Tip");
+
+	}
+	public void ShowTestPage(){
+
+		UnityEngine.SceneManagement.SceneManager.LoadScene("FG-4-ARnewTest");
+
 	}
 
 
 
-
-	public void ToggleAutofocus()
-	{
+	public void ToggleAutofocus(){
 		Toggle autofocusToggle = FindUISelectableWithText<Toggle>("Autofocus");
 		if (autofocusToggle && mCamSettings)
 			mCamSettings.SwitchAutofocus(autofocusToggle.isOn);
