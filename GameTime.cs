@@ -21,11 +21,24 @@ public class GameTime : MonoBehaviour {
 
 	private float IslandPer;
 
+
+
+
 	// Use this for initialization  
+
+	void Awake(){
+
+
+
+
+
+	}
+
+
 	void Start() {  
 		
 		nowTime = (System.DateTime.Now.Ticks - System.DateTime.Parse("1970-01-01").Ticks) / 10000000;  
-		Debug.Log(nowTime.ToString());  
+
 		InvokeRepeating("CountDown", 0, 1);  
 	}  
 
