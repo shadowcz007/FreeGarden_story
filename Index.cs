@@ -12,9 +12,8 @@ public class Index : MonoBehaviour {
 
 
 
-	[RuntimeInitializeOnLoadMethod]
-	static void Initialize()
-	{
+	//RuntimeInitializeOnLoadMethod
+	static void Initialize(){
 		TextAsset m_XmlTextAsset = Resources.Load ("DefaultData") as TextAsset;
 		XmlDocument m_xmlDoc = loadXmlnew (m_XmlTextAsset);
 
@@ -121,4 +120,27 @@ public class Index : MonoBehaviour {
 
 		UnityEngine.SceneManagement.SceneManager.LoadScene("Vuforia-1-Index");
 	}
+
+
+	public void AllOpenXML(){
+		string path = Application.persistentDataPath + "/DefaultData.xml";
+		if(File.Exists(path)){
+			XmlDocument xml = new XmlDocument();
+			xml.Load(path);
+			XmlNodeList xmlNodeList = xml.SelectSingleNode("objects").ChildNodes;
+			foreach (XmlElement xl1 in xmlNodeList) {
+				if (xl1.GetAttribute ("id") == "show") {
+
+					foreach(XmlElement xl2 in xl1.ChildNodes){	
+						xl2.SetAttribute ("display","show");
+					}		
+
+				}
+			}
+			xml.Save(path);
+		}
+
+		UnityEngine.SceneManagement.SceneManager.LoadScene("Vuforia-1-Index");
+	}
+
 }
