@@ -4,21 +4,27 @@ using System.Collections;
 using UnityEngine.UI;
 public class GetGPS : MonoBehaviour {  
 
-	public string gps_info = "";  
+	public float gps_info_lat ;  
+	public float gps_info_log ;  
+	public string gps_info_time;  
+
 	public int flash_num = 1;  
 	 
 
-	public GameObject gpsinfo;
+	public GameObject gpsinfo_lat;
+	public GameObject gpsinfo_log;
+	public GameObject gpsinfo_time;
+
 	void Start(){
-
-
+		
 	
 	}
 	void Update(){
 		
-		gpsinfo.GetComponent<Text> ().text = gps_info;
+		gpsinfo_lat.GetComponent<Text> ().text = gps_info_lat.ToString ();
 
-	
+		gpsinfo_log.GetComponent<Text> ().text = gps_info_log.ToString ();
+		gpsinfo_time.GetComponent<Text> ().text = gps_info_time ;
 	}
 
 	 
@@ -26,8 +32,10 @@ public class GetGPS : MonoBehaviour {
 	// Input.location = LocationService  
 	// LocationService.lastData = LocationInfo   
 	public void RefreshGPS(){
-		this.gps_info = "N:" + Input.location.lastData.latitude + " E:"+Input.location.lastData.longitude;  
-		this.gps_info = this.gps_info + " Time:" + Input.location.lastData.timestamp;  
+		
+		this.gps_info_lat =Input.location.lastData.latitude;  
+		this.gps_info_log =Input.location.lastData.longitude; 
+		this.gps_info_time =Input.location.lastData.timestamp.ToString ();  
 		this.flash_num += 1;   
 	}
 	public void StopGPS () {  
@@ -35,14 +43,14 @@ public class GetGPS : MonoBehaviour {
 	}  
 
 	public void StartGPS(){	
-		StartCoroutine(IEnStartGPS());  
+		StartCoroutine(IEnstart());  
 	}
 
-	IEnumerator IEnStartGPS () {  
+	IEnumerator IEnstart () {  
 		// Input.location 用于访问设备的位置属性（手持设备）, 静态的LocationService位置  
 		// LocationService.isEnabledByUser 用户设置里的定位服务是否启用  
 		if (!Input.location.isEnabledByUser) {  
-			this.gps_info = "isEnabledByUser value is:"+Input.location.isEnabledByUser.ToString()+" Please turn on the GPS";   
+			this.gps_info_time = "isEnabledByUser value is:"+Input.location.isEnabledByUser.ToString()+" Please turn on the GPS";   
 			return false;  
 		}  
 
@@ -57,17 +65,18 @@ public class GetGPS : MonoBehaviour {
 		}  
 
 		if (maxWait < 1) {  
-			this.gps_info = "Init GPS service time out";  
+			this.gps_info_time = "Init GPS service time out";  
 			return false;  
 		}  
 
 		if (Input.location.status == LocationServiceStatus.Failed) {  
-			this.gps_info = "Unable to determine device location";  
+			this.gps_info_time = "Unable to determine device location";  
 			return false;  
 		}   
 		else {  
-			this.gps_info = "N:" + Input.location.lastData.latitude + " E:"+Input.location.lastData.longitude;  
-			this.gps_info = this.gps_info + " Time:" + Input.location.lastData.timestamp;  
+			this.gps_info_lat =Input.location.lastData.latitude;  
+			this.gps_info_log =Input.location.lastData.longitude;  
+			this.gps_info_time =Input.location.lastData.timestamp.ToString ();  
 			yield return new WaitForSeconds(100);  
 		}  
 	}  
