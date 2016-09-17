@@ -3,32 +3,110 @@ var fs=require('fs');
 var superagent=require('superagent');
 var eventproxy = require('eventproxy');
 var cheerio=require('cheerio');
-
+var url=require('url');
 
 
 var app=express();
-
-fs.readFile('data/shanghaiTUDI.json',function(err,data){  
-    if(err) { throw err;  } 
-       
-  //   console.log(data);     
-    var jsonObj=JSON.parse(data);  
-    var items=[];
-    
-    for (var i = jsonObj.data.list.length - 1; i >= 0; i--) {
-    	jsonObj.data.list[i];
-    	items.push(
-    		{
-    			year:jsonObj.data.list[i].bianh,
-    			mj:jsonObj.data.list[i].mianj,
-    			area:jsonObj.data.list[i].dikmc,
-    			type:jsonObj.data.list[i].guihyt
-    		});
-    	
-    };
-
-  // console.log(items);
+var items=[];
+var content=[];
+var ep =new eventproxy();
+ep.fail(function (err) {
+  throw err;
 });
+var items=[];
+fs.readFile('data/-test.json',function(err,data){  
+    if(err) { throw err;  } 
+    var jsonObj=JSON.parse(data); 
+    for (var i = jsonObj.data.list.length - 1; i >= 0; i--) {
+    	var str="http://www.shgtj.gov.cn/i/tdsc/crdk/?id=";
+    	var urlobj=str+jsonObj.data.list[i].bianh;
+    	items.push(urlobj);
+    };
+    console.log(items); 
+
+    var ep = new eventproxy();
+   
+	ep.after('topic_html', items.length, function (topics) {
+      topics = topics.map(function (topicPair) {
+        var topicUrl = topicPair[0];
+      //  console.log(topics);
+        if(!topicPair[1]){
+
+        	return({})
+
+        }
+        var data = JSON.parse(topicPair[1]).data;
+       	
+       	return({id:topicUrl.replace('http://www.shgtj.gov.cn/i/tdsc/crdk/?id=',''),
+       			data:data
+       		})
+
+       /* var $ = cheerio.load(Html);
+        
+        console.log(Html);
+       
+        return ({
+          zongbj: $('#zongbj').html(),
+          zongbr: $('#zongbr').text(),
+          
+        });
+		*/
+      });
+
+      console.log('final:');
+      fs.writeFile("data/shanghaiTUDIJG.json",JSON.stringify(topics),function(err){
+    if(!err)
+    console.log("写入成功！")
+})
+      console.log(topics);
+    });
+
+    items.forEach(function (topicUrl) {
+      superagent.get(topicUrl)
+        .end(function (err, res) {
+          console.log('fetch ' + topicUrl + ' successful');
+          
+          	ep.emit('topic_html', [topicUrl, res.text]);
+         
+          
+        });
+    });
+
+
+
+
+      
+});
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+    
+    
+    
+   
+
+
+	
+
+
+
+
+
+
 
 
 
@@ -37,10 +115,10 @@ fs.readFile('data/shanghaiTUDI.json',function(err,data){
 /*
 
 app.get('/jianshu',function(req,res,next){
-superagent.get(urls).end((err,res)=>{
+superagent.get(items).end((err,res)=>{
 	cookie=res.headers['set-cookie'].join(',').match(/(_session_id=.+?);/)[1];
 	console.log(cookie);
-	app.post(urls)
+	app.post(items)
 	.set(base_headers)
 	.set('Cookie',cookie)
 	.type('form')
@@ -65,8 +143,8 @@ app.get('/1',function(req,res,next){
 				console.log(err);
 				return next(err);
 			};
-			 var topicUrls = [];
-		    var $ = cheerio.load(res.text);
+			 var topicitems = [];
+		    var $ = cheerio.load(sres.text);
 
 		    $('.txt-box a').each(function (idx, element) {
 		      var $element = $(element);
