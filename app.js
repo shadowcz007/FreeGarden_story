@@ -1,9 +1,9 @@
 var express=require('express');
-var fs=require('fs');
-var superagent=require('superagent');
-var eventproxy = require('eventproxy');
-var cheerio=require('cheerio');
-var url=require('url');
+var fs=require('fs');//读写文件
+var superagent=require('superagent');//http
+var eventproxy = require('eventproxy');//事件控制，多个网页爬取
+var cheerio=require('cheerio');//解析html
+var url=require('url');//
 
 
 var app=express();
