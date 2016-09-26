@@ -1,25 +1,23 @@
-////第7步 用户画像Personas,保存为type_Personas.json,原文件缺失的清单type_erro_id.json
+////第7步 用户画像Personas,保存为type_Personas.json;到访的所有用户id _PersonasList,原文件缺失的清单type_erro_id.json
 // 
-var jsonObj=[{"id":"66868228","cnums":"44"},{"id":"66375512","cnums":"42"},{"id":"48217808","cnums":"66"},{"id":"58002601","cnums":"42"},{"id":"66914063","cnums":"49"}];
-
-
-
+var jsonObj=[{"id":"1902862","comments":"840"}];
+//
 const fs=require('fs');//读写文件
 var cheerio=require('cheerio');//解析html
 var items=[];
 
 var count=0;
 
-var _PersonasNums=1.2;
-//PersonasNums 3
+var _PersonasNums=1;
+//PersonasNums 5
 var _TYPE="keepfit";
 var path=[];
 var erro_id=[];
-
+var user_id_Array=[];
  
-for (var i = jsonObj.length - 1; i >= 0; i--) {
-        //注意.cnums
-    for (var j = Math.ceil(jsonObj[i].cnums/20); j >= 1; j--) {
+for (let i = jsonObj.length - 1; i >= 0; i--) {
+        //注意.comments
+    for (let j = Math.ceil(jsonObj[i].comments/20); j >= 1; j--) {
             
            count++;
 
@@ -28,9 +26,9 @@ for (var i = jsonObj.length - 1; i >= 0; i--) {
    
 };
 
-for (var i = jsonObj.length - 1; i >= 0; i--) {
+for (let i = jsonObj.length - 1; i >= 0; i--) {
         
-    for (var j =Math.ceil(jsonObj[i].cnums/20); j >= 1; j--) {
+    for (let j =Math.ceil(jsonObj[i].comments/20); j >= 1; j--) {
            count--; 
             
            path.push("./"+_TYPE+"_page/"+jsonObj[i].id+"="+j+"p.html");
@@ -47,7 +45,7 @@ for (var i = jsonObj.length - 1; i >= 0; i--) {
  
 function next(){
 
-	for (var i = path.length - 1; i >= 0; i--) {
+	for (let i = path.length - 1; i >= 0; i--) {
 		 
 		
 
@@ -88,12 +86,15 @@ function next(){
 							      	"user_contribution":user_contribution,
 							        "comment_info":comment_info,
 				      				"comment_txt":comment_txt,
-				      				"comment_pic":stringMiddle(comment_pic,'<img src="','" panel-src'),
+				      				"comment_pic":stringMiddle(comment_pic,'<img src="','" panel-src').replace('img src="',''),
 				      				"comment_time":comment_time,
 				      				"target_id":url_id
 				      			  }		      	
 				      	
 				      });
+
+				     	user_id_Array.push(user_id);
+
 
 				      console.log("第"+items.length+"---------------------------共"+path.length*20);
 				      console.log(items);
@@ -155,15 +156,22 @@ function next(){
 		}
 
 		 
-		fs.writeFile("./public/data/"+_TYPE+"_PersonasNums"+_PersonasNums+".json",JSON.stringify(items),function(err){
+		fs.writeFile("./public/data/"+_TYPE+"_PersonasNums"+_PersonasNums+".json",JSON.stringify(items, null, 2),function(err){
 						    if(!err)
 						    console.log("done!!!!!!"+items.length)
 						});
-		fs.writeFile("./public/data/"+_TYPE+"_erro_id.json",JSON.stringify(erro_id),function(err){
+		
+		fs.writeFile("./public/data/"+_TYPE+"_PersonasList"+_PersonasNums+".json",JSON.stringify(unique3(user_id_Array)),function(err){
+						    if(!err)
+						    console.log("done!!!!!!"+items.length)
+						});
+
+
+		/*fs.writeFile("./public/data/"+_TYPE+"_erro_id.json",JSON.stringify(erro_id),function(err){
 						    if(!err)
 						    console.log("erro!!!!!!"+erro_id.length)
 						});
-
+	*/
 	};
 
 };
@@ -175,3 +183,16 @@ function stringMiddle(strtarget,one,two){
 	return str
 
 }
+function unique3(array){
+ var res = [];
+ var json = {};
+ for(var i = 0; i < array.length; i++){
+  if(!json[array[i]]){
+   res.push(array[i]);
+   json[array[i]] = 1;
+  }
+ }
+ return res;
+}
+
+

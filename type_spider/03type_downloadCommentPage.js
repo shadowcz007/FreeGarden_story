@@ -6,7 +6,10 @@ var origin="http://www.dianping.com/shop/";
 
 var originLast="/review_more?pageno=";
  console.log(originLast);
-var jsonObj=[{"id":"11547147","cnums":"282"},{"id":"32336771","cnums":"158"},{"id":"27334915","cnums":"95"}];
+
+//var jsonObj=require('./public/data/play_0.json');
+var jsonObj=[{"id":"1902862","comments":"840"}];
+
 
 var _TYPE="keepfit";
 var _ID=50;//页数50
@@ -20,7 +23,7 @@ var down_ID=[];
 
 for (var i = jsonObj.length - 1; i >= 0; i--) {
         
-    for (var j = Math.ceil(jsonObj[i].cnums/20); j >= 1; j--) {
+    for (var j = Math.ceil(jsonObj[i].comments/20); j >= 1; j--) {
             
            count++;
 
@@ -33,7 +36,7 @@ for (var i = jsonObj.length - 1; i >= 0; i--) {
 
 for (var i = jsonObj.length - 1; i >= 0; i--) {
         
-    for (var j =Math.ceil(jsonObj[i].cnums/20); j >= 1; j--) {
+    for (var j =Math.ceil(jsonObj[i].comments/20); j >= 1; j--) {
            count--; 
            links.push( origin+jsonObj[i].id+originLast+j+'p.html');
            if (count<=0) {
@@ -51,6 +54,7 @@ for (var i = jsonObj.length - 1; i >= 0; i--) {
 
 function next(){
 	casper.start().each(links, function(self, link) {
+
     	self.thenOpen(link, function() {
     			console.log(this.getCurrentUrl());
     			var page=this.getCurrentUrl().replace(origin,'').replace(originLast,'=');
