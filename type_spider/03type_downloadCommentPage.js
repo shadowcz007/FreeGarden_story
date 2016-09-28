@@ -1,4 +1,4 @@
-// 获得 评论页
+// 获得 shop的 评论页
 
 var casper = require('casper').create();
 
@@ -8,10 +8,10 @@ var originLast="/review_more?pageno=";
  console.log(originLast);
 
 //var jsonObj=require('./public/data/play_0.json');
-var jsonObj=[{"id":"1902862","comments":"840"}];
+var jsonObj=[{"id":"67255928","comments":"461"},{"id":"23999832","comments":"7480"}];
 
 
-var _TYPE="keepfit";
+var _TYPE="eat_Mr_Nice";
 var _ID=50;//页数50
 
 var links=[];
@@ -49,10 +49,11 @@ for (var i = jsonObj.length - 1; i >= 0; i--) {
    
 };
 
-
+//.reverse().slice(368,374)
 
 
 function next(){
+
 	casper.start().each(links, function(self, link) {
 
     	self.thenOpen(link, function() {

@@ -67,7 +67,7 @@ var PersonModel=mongoose.model("users",PScheMa);
 //geoToMongodb("./public/data/"+_TYPE+"_geo.json");
 //telToMongodb("./public/data/"+_TYPE+"_tel.json");	 
 
-personasToMongodb("./public/data/"+_TYPE+"_PersonasNums1.json");
+//personasToMongodb("./public/data/"+_TYPE+"_PersonasNums1.json");
 //comsToMongodb("./public/data/"+_TYPE+"_PersonasNums1.json");
 //comsNumsToMongodb("./public/data/"+_TYPE+".json");
 
@@ -185,7 +185,9 @@ function comsToMongodb(path){
 	};
  
 }
+function user_line(uid){
 
+}
 
 function comsNumsToMongodb(path){
 	var data=fs.readFileSync(path);
