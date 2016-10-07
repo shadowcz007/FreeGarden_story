@@ -8,7 +8,7 @@ module.exports = function(opts){
     var pageUrl=[]; //所有目录页面的连接
     var fetchList = []; 
    // var picList=[];
-   // var picUrls=[];
+   var picUrls=[];
     
     //page
     this.thenOpen(opts.url,function(){ 
@@ -71,7 +71,7 @@ module.exports = function(opts){
         _.each(pageUrl,function(li){  
             this.thenOpen(li,function(li){ 
 
-                var rst = this.evaluate(function(opts){  
+                var rst = this.evaluate(function(data){  
                   
                       var urls=[],titles=[],date=[];
 
@@ -93,7 +93,7 @@ module.exports = function(opts){
                         'url':urls,  
                         'tilte':titles,
                         'date':date,
-                        'pageNum':opts  
+                        'pageNum':data  
                        // userName:userName ,  
                         //postTime:postTime,  
                         //imgUrls:imgUrls  
@@ -105,6 +105,8 @@ module.exports = function(opts){
                 this.echo(index+": "+this.getCurrentUrl());  
                 index++;  
                 fetchList.push(rst);
+
+               // picUrls.push(rst[1]);
 
             }.bind(this,li));  
         }.bind(this)); 
@@ -142,10 +144,13 @@ module.exports = function(opts){
 
     this.then(function(){  
         // save to file  
-        var category = opts.category;  
-        //this.emit('saveToJson',{index:1,category:category,picList:picList});
-        this.emit('saveToJson',{index:0,category:category,fetchList:fetchList});
-    });  
+        var category = opts.category; 
+        //picUrls=picUrls.join(",").split(","); 
+        this.emit('saveToJson',fetchList);
+        this.emit('saveToJson',{index:0,category:category,list:fetchList});
+    }); 
+
+    
 
 
 /*
