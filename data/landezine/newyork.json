@@ -1,0 +1,74 @@
+[
+    {
+        "url": "http://www.landezine.com/index.php/2009/07/teardrop-park/",
+        "lat": 40.717096,
+        "lng": -74.01546200000001,
+        "info": "Teardrop park by Michael Van Valkenburg Associates"
+    },
+    {
+        "url": "http://www.landezine.com/index.php/2010/11/ps1-pole-dance-by-so-il/",
+        "lat": 40.745503,
+        "lng": -73.94730600000003,
+        "info": "PS1 Pole Dance by SO-IL"
+    },
+    {
+        "url": "http://www.landezine.com/index.php/2011/11/the-edge-park-landscape-architecture/",
+        "lat": 40.720709,
+        "lng": -73.96356000000003,
+        "info": "The Edge Park by W-Architecture"
+    },
+    {
+        "url": "http://www.landezine.com/index.php/2013/03/national-911-memorial-by-pwp-landscape-architecture/",
+        "lat": 40.711581,
+        "lng": -74.013036,
+        "info": "National 9/11 Memorial by PWP Landscape Architecture"
+    },
+    {
+        "url": "http://www.landezine.com/index.php/2013/08/fdr-four-freedoms-park/",
+        "lat": 40.750443,
+        "lng": -73.96058299999999,
+        "info": "FDR Four Freedoms Park"
+    },
+    {
+        "url": "http://www.landezine.com/index.php/2014/01/high-line-section-2-by-james-corner-field-operations/",
+        "lat": 40.752004,
+        "lng": -74.00081599999999,
+        "info": "High Line, Section 2 by James Corner Field Operations"
+    },
+    {
+        "url": "http://www.landezine.com/index.php/2014/01/hunters-point-south-waterfront-park-by-thomas-balsley-associates-weissmanfredi/",
+        "lat": 40.74203037254559,
+        "lng": -73.96133422851562,
+        "info": "Hunter’s Point South Waterfront Park by Thomas Balsley Associates / WEISS/MANFREDI"
+    },
+    {
+        "url": "http://www.landezine.com/index.php/2014/10/hudson-river-park-segment-5-by-michael-van-valkenburgh-associates/",
+        "lat": 40.749279,
+        "lng": -74.009255,
+        "info": "Hudson River Park, Segment 5 by Michael Van Valkenburgh Associates"
+    },
+    {
+        "url": "http://www.landezine.com/index.php/2014/12/the-west-harlem-piers-park-by-w-architecture/",
+        "lat": 40.81885,
+        "lng": -73.96114599999999,
+        "info": "The West Harlem Piers Park by W Architecture"
+    },
+    {
+        "url": "http://www.landezine.com/index.php/2015/01/governors-island-ph-1-by-west8/",
+        "lat": 40.688632,
+        "lng": -74.02099499999997,
+        "info": "Governors Island Phase 1 by West 8"
+    },
+    {
+        "url": "http://www.landezine.com/index.php/2015/04/david-h-koch-plaza-at-the-metropolitan-museum-of-art-olin-landscape-architecture/",
+        "lat": 40.779389,
+        "lng": -73.96213,
+        "info": "David H. Koch Plaza at the Metropolitan Museum of Art by OLIN"
+    },
+    {
+        "url": "http://www.landezine.com/index.php/2016/07/opens-tomorrow-governors-island-phase-2-the-hills-by-west-8/",
+        "lat": 40.687344,
+        "lng": -74.02345100000002,
+        "info": "Governors Island Phase 2 – The Hills by West 8"
+    }
+]
