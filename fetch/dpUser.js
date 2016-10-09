@@ -1,10 +1,11 @@
 
 var _ = require("lodash");  
-  
+console.log('ddfd');  
 module.exports = function(opts){  
     //     
     //   
     //var list=[];
+      console.log(opts); 
     var page=[];
     var pageUrl=[]; //所有目录页面的连接
     var fetchList = []; 

@@ -1,6 +1,7 @@
 // 生成casper的实例  
 // verbose默认值为false,即不输出来自phantom的信息(请记住,casper是基于phantom的)  
 // logLevel表示何种级别输出信息,枚举为debug, info, warning, error  
+//casperjs index.js --url=http://www.dianping.com/shop/ --category=58839368 --fetch=dpUser.js 
 var fs=require('fs');
  
 
@@ -20,10 +21,14 @@ var opts = {
     category : casper.cli.get("category"),
     ifDownLoad : casper.cli.get("download")  
 };  
- 
- console.log(opts);  
 
+  console.log('---------------'); 
+ console.log(opts.url);  
+ console.log(opts.fetch); 
+  console.log(opts.category); 
+   console.log(opts.ifDownLoad); 
   
+  console.log('---------------'); 
 // 用来计算时间  
 var startTime, endTime;  
   
@@ -59,7 +64,7 @@ casper.then(function(){
         require("./fetch/"+opts.fetch.replace(".js","Pic.js")).call(casper,opts);
 
     }else{
-
+      
         require("./fetch/"+opts.fetch).call(casper,opts); 
 
     };
