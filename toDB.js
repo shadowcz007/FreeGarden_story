@@ -27,7 +27,7 @@ db.once('open', function callback () {
 	console.log('mongoose open success');
 });
 
- 
+var _shopid="588393680";
 
 var _TYPE='DisneySH';
 
@@ -48,7 +48,7 @@ var model=mongoose.model(_TYPE,ScheMa);
 //geoToMongodb("./public/data/"+_TYPE+"_geo.json");
 //telToMongodb("./public/data/"+_TYPE+"_tel.json");	 
 
-personasToMongodb("./data/dpUser/"+_TYPE+".json");
+personasToMongodb("./data/dpUser/"+_shopid+".json");
 //comsToMongodb("./public/data/"+_TYPE+"_PersonasNums1.json");
 //comsNumsToMongodb("./public/data/"+_TYPE+".json");
 
@@ -60,23 +60,27 @@ personasToMongodb("./data/dpUser/"+_TYPE+".json");
 
 function personasToMongodb(path){
 	let data=fs.readFileSync(path);
-	let jsonObj=JSON.parse(data);
+	let jsonobj1=JSON.parse(data);
+	let jsonObj=jsonobj1.list;
 
 	let myarray=[];
 
 	let count_per=0;
 
 	for (let i = jsonObj.length - 1; i >= 0; i--) {
-		let _json1=jsonObj[i];
+		let _json1=jsonObj[i].user_id;
 
+		for (let i = _json1.length - 1; i >= 0; i--) {
+			 
+	
 		//myarray.push(_json1.replace("{","").replace("}","").split(/[,_]/));
 		
 		console.log("---------------");
 		//console.log(_json1.user_id);
 		
-		let newUser_id = {'memberId':_json1};
+		let newUser_id = {'memberId':_json1[i]};
 		let newUser={
-				'memberId':_json1
+				'memberId':_json1[i]
 				
 		};
 		model.findOne(newUser_id,function(err,person){
@@ -96,7 +100,7 @@ function personasToMongodb(path){
       		
     	});
 
-
+	};
 
 	};
  
