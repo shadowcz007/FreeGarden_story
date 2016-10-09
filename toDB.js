@@ -49,6 +49,7 @@ var model=mongoose.model(_TYPE,ScheMa);
 //telToMongodb("./public/data/"+_TYPE+"_tel.json");	 
 
 personasToMongodb("./data/dpUser/"+_shopid+".json");
+personasToMongodb("./data/dpUser/user/");
 //comsToMongodb("./public/data/"+_TYPE+"_PersonasNums1.json");
 //comsNumsToMongodb("./public/data/"+_TYPE+".json");
 
