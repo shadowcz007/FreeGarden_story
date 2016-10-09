@@ -76,7 +76,9 @@ module.exports = function(opts){
     this.then(function(){  
  
         var index = 0;  
-        // 遍历列表中各个链接,去捕获消息  
+        // 遍历列表中各个链接,去捕获消息
+       // pageUrl=pageUrl.slice(0,5);
+
         _.each(pageUrl,function(li){  
             this.thenOpen(li,function(li){ 
 
@@ -102,7 +104,7 @@ module.exports = function(opts){
                 // 简单原始的对象li可以被注入   
                 },li);  
         
-                console.log(rst);
+                console.log(rst.user_id);
                 this.echo(index+": "+this.getCurrentUrl());  
                 index++;  
                 fetchList.push(rst);
