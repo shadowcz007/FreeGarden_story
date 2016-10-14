@@ -2,7 +2,7 @@ var _ = require("lodash");
   
 module.exports = function(opts){  
     //console.log(opts.link);
-    console.log("-----------????????????????????");
+    console.log("-----------xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxPic.js");
     var pageUrl=opts.link; //所有目录页面的连接
     
   
@@ -20,9 +20,12 @@ module.exports = function(opts){
         var index = 0;  
         // 遍历列表中各个链接,去捕获消息  
         _.each(pageUrl,function(li){
-            console.log(li);  
-            this.thenOpen(li,function(li){ 
+            
+            
 
+        if (li) {
+            this.thenOpen(li,function(li){ 
+                console.log(li);
                 var rst = this.evaluate(function(opts){  
                   
                       var urls=[],titles=[],date=[];
@@ -53,31 +56,34 @@ module.exports = function(opts){
                 // 简单原始的对象li可以被注入   
                 },li);  
                 
-                // 把imgurl转成img的base64                
+                // 把imgurl转成img的base64  
+                 
+                
+                console.log("project----------------------------"); 
+                var projectName=this.getCurrentUrl().replace(/.*\/|.htm/g,'');
+                console.log(projectName);              
                 this.then(function(){ 
-
-                    var imgCodes = [];  
+                    //var imgCodes = []; 
+                    var imgcounts=0; 
                     _.each(rst.picUrl,function(imgUrl){ 
 
                         this.thenOpen(imgUrl,function(imgUrl){  
                             //console.log(imgUrl);
-                            var imgCode = this.base64encode(imgUrl);
+                            imgcounts++;
+                            this.download(imgUrl, "./data/gooood/"+opts.category+"/"+projectName+imgcounts+".png"); 
+                            //var imgCode = this.base64encode(imgUrl);
                             //console.log(imgCode);  
-                            imgCodes.push(imgCode);  
+                            //imgCodes.push(imgCode);  
                         }.bind(this,imgUrl));  
-                    }.bind(this)); 
-
-                    this.then(function(){  
-                        rst.imgCodes = imgCodes; 
-                        //this.emit('saveToJson',{index:2,num:index,category:category,rst}); 
-                    });  
+                    }.bind(this));                     
                 });  
   
                 this.echo(index+": "+this.getCurrentUrl());  
                 index++;  
-                fetchList.push(rst);
+               // fetchList.push(rst);
 
-            }.bind(this,li));  
+            }.bind(this,li));
+            };  
         }.bind(this)); 
         
     }); 
@@ -86,7 +92,7 @@ module.exports = function(opts){
         // save to file  
         var category = opts.category;  
        console.log(fetchList);
-        this.emit('saveToJson',{index:2,category:category,list:fetchList}); 
+      //  this.emit('saveToJson',{index:2,category:category,list:fetchList}); 
     });  
 
 

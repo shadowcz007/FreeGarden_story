@@ -1,18 +1,30 @@
 var _ = require("lodash");  
   
 module.exports = function(opts){  
-    //console.log(opts.link);
+     console.log(opts.link);
     console.log("-----------????????????????????");
-    var pageUrl=opts.link; //所有目录页面的连接
+    var pageUrl; //所有目录页面的连接
     
-  
-    console.log(pageUrl); 
+    pageUrl=opts.link;
+    
+    var userMoreInfo=[]; 
+   // console.log(pageUrl); 
     
     //     
     //   
     //var list=[];
-   // pageUrl=pageUrl.slice(0,2);
- console.log(pageUrl.length);
+ pageUrl=pageUrl.slice(10300,10400);//爬取到这里
+
+ //pageUrl=pageUrl.slice(14200,14248);//下载json
+ 
+console.log("-----------14248??????????????----??????????????----??????????????----????????????????????");
+
+console.log(pageUrl.length);
+
+console.log("startform:"+pageUrl[0]);
+
+console.log("endto:"+pageUrl[39]);
+console.log("-----------??????????????----??????????????----??????????????----????????????????????");
     var page=[];
   
     var fetchList = []; 
@@ -25,37 +37,95 @@ module.exports = function(opts){
         // 遍历列表中各个链接,去捕获消息  
         _.each(pageUrl,function(li){
             var uid=li;
-            li=strhttp+li;
-            console.log(li);  
+            var user_id;
+
+            if (!opts.pic) {
+                li=strhttp+li;
+            }else{
+
+                user_id=li.memberId;
+                li=li.userFace;
+
+            };
+            
+            //console.log(li); 
+  
+            //下载头像，用户的头像url
+    /*
             this.thenOpen(li,function(li){ 
-
-                this.download(li, "./data/dpUser/user/"+uid); 
-              /*  
-                // 把imgurl转成img的base64                
-                this.then(function(){ 
-
-                    var imgCodes = [];  
-                    _.each(rst.picUrl,function(imgUrl){ 
-
-                        this.thenOpen(imgUrl,function(imgUrl){  
-                            //console.log(imgUrl);
-                            var imgCode = this.base64encode(imgUrl);
-                            //console.log(imgCode);  
-                            imgCodes.push(imgCode);  
-                        }.bind(this,imgUrl));  
-                    }.bind(this)); 
-
-                    this.then(function(){  
-                        rst.imgCodes = imgCodes; 
-                        //this.emit('saveToJson',{index:2,num:index,category:category,rst}); 
-                    });  
-                });  
-  */
+                if (opts.pic) {
+                      
+                     this.download(li, "./data/dpUser/userPic/"+user_id+".png");
+                     console.log(user_id); 
+                }else{
+                     this.download(li, "./data/dpUser/user/"+uid+".json"); 
+                     this.echo("download================"+uid);  
+                };
+               
                 this.echo(index+": "+this.getCurrentUrl());  
                 index++;  
-               // fetchList.push(rst);
+ 
+            }.bind(this,li));
 
-            }.bind(this,li));  
+*/
+
+
+
+               var liN;
+                var ok2=true;
+            
+            if (!opts.pic && ok2) {
+                    liN="http://www.dianping.com/member/"+li.replace(strhttp,'');
+                console.log("liN"+liN);
+                 this.thenOpen(liN,function(){ 
+                    
+                    var user_id1=liN.replace('http://www.dianping.com/member/','');
+                    this.echo(user_id1);
+                    var result=this.evaluate(function(){
+                        var moreinfo1=$('#J_UMoreInfoD').text(),
+                            moreinfo2=$('.user_atten').text(),
+                            moreinfo3=$('#J_usertag').text();
+
+
+                        if (moreinfo1) {
+                            moreinfo1=moreinfo1.replace(/\t|\s{2,}/g,',').replace(',','');
+                        }else{
+                            moreinfo1="0";
+                        };
+                        if (moreinfo2) {
+                            moreinfo2=moreinfo2.replace(/\s{1,}/g,'').replace(/.*粉丝|互动.*/g,'');
+
+                        }else{
+                            moreinfo2="0";
+                        };
+                        if (moreinfo3) {
+                            moreinfo3=moreinfo3.replace(/\s{2,}/g,' ');
+                        }else{
+                            moreinfo3="0";
+                        };
+
+                        return [moreinfo1,moreinfo2,moreinfo3]                        
+                        
+
+                    });
+
+                    this.echo(result);
+                    userMoreInfo.push({
+                        "user_id":user_id1,
+                        "more_info":result[0],
+                        "fans":result[1],
+                        "tag":result[2]
+                    });
+
+                });};
+             
+        
+
+          //  }.bind(this,li));
+            
+            
+   
+
         }.bind(this)); 
         
     }); 
@@ -67,7 +137,7 @@ module.exports = function(opts){
 
 
       // console.log(cl);
-      //  this.emit('saveToJson',{index:2,list:JSON.parse(cl)}); 
+      this.emit('saveToJson',{index:2,list:userMoreInfo}); 
     });  
 
 

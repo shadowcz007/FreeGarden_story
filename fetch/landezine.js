@@ -79,7 +79,7 @@ module.exports = function(opts){
     //   
     //var list=[];
       console.log(opts.url); 
-    var page=["Australia","Austria","Belgium","Brazil","Canada","Chile","China","Colombia","Croatia","Czech-Republic","Denmark","Ecuador","Estonia","Finland","France","Germany","Hungary","Ireland","Israel","Italy","Japan","Korea","Kuwait","Latvia","Lebanon","Luxembourg","Mexico","Morocco","New-Zealand","Norway","Oslo","Poland","Portugal","Romania","Russia","Scotland","Singapore","Slovenia","South-Africa","Spain","Sultanate of Oman","Sweden","Switzerland","Taiwan","Tasmania","Thailand","The-Netherlands","Turkey","UK","United-Arab-Emirates","USA","Alaska","Arizona","California","Connecticut","Florida","Illinois","Indiana","Massachusetts","Minnesota","Missouri","Nevada","New-Hampshire","New-York","Ohio","Oregon","Pennsylvania","Philadelphia","Tennessee","Texas","Virginia","Washington"];
+    var page=["292","41","44","51","57","60","452","62","66","970","67","988","548","74","255","91","1128","282","94","95","1060","1146","101","1007","500","509","600","126","133","1034","144","532","158","588","163","505","167","797","174","176","179","473","585","213","579","188","567","189","561","685","257","1103","751","258","996","232","270","1100","1138","625","125","603","629","655","1180","677","998","1011","976"];
     var pageUrl=[]; //所有目录页面的连接
     var fetchList = []; 
    // var picList=[];
@@ -104,7 +104,7 @@ module.exports = function(opts){
 
         var index = 0;  
         // 遍历列表中各个链接,去捕获消息
-       // pageUrl=pageUrl.slice(0,5);
+       // pageUrl=pageUrl.slice(0,1);
 
         _.forEach(pageUrl,function(li){ 
        
@@ -115,20 +115,22 @@ module.exports = function(opts){
                   
                       
                     var item=document.getElementById("iwrapin").childNodes[5].children;
+					if (!item) {return [{"title":null}]};
 					var ut=[];	
 					
 					for(var i=0;i<=item.length-1;i++){
-						 var title;
-						 var urls;
-						title=item[i].childNodes[1].innerText;
-						urls=item[i].childNodes[1].childNodes[0].href;
-						ut.push({
-							"index":"item"+parseInt(i+1),
-							"title":title,
-							"url":urls
-						});
+							 var title;
+							 var urls;
+							title=item[i].childNodes[1].innerText;
+							urls=item[i].childNodes[1].childNodes[0].href;
+							ut.push({
+								"index":"item"+parseInt(i+1),
+								"title":title,
+								"url":urls
+							});
 
 						};
+						
                 		
                 		var jsonstr=document.getElementById("iwrapin").childNodes[7].innerText.replace('var locations = ','');
 						var jsonstr1=jsonstr.replace(/\s{1,}|\n/g,'').replace(',];',']').replace(/newgoogle.maps.LatLng\(/g,'').replace(/document.getElementById\(/g,'').replace(/\)}/g,'}');
@@ -141,14 +143,12 @@ module.exports = function(opts){
                     		ut[i].latlng=jsonstr3[i].latlng;
                     	};
 
-                    return {"country":li,
-                    		"info":ut
-                		}
+                    return ut
 
                 // 简单原始的对象li可以被注入   
                 },li);  
         
-                //console.log(rst.info);
+                console.log(rst[0].title);
                 this.echo(index+": "+this.getCurrentUrl());  
                 index++;  
                 fetchList.push(rst);
