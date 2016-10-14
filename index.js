@@ -1,7 +1,31 @@
 // 生成casper的实例  
 // verbose默认值为false,即不输出来自phantom的信息(请记住,casper是基于phantom的)  
-// logLevel表示何种级别输出信息,枚举为debug, info, warning, error  
+// logLevel表示何种级别输出信息,枚举为debug, info, warning, error 
+
+
+//dianping下载shopid对应的user
 //casperjs index.js --url=http://www.dianping.com/shop/ --category=58839368 --fetch=dpUser.js --pg=193
+//如果是数组，
+//调用xxxA.json
+//
+
+//dianping下载userface
+//casperjs index.js --url=http://www.dianping.com/shop/ --category=KF --fetch=dpUser.js --download=true --pic=true
+
+//dianping下载userMoreInfo
+//casperjs index.js --url=http://www.dianping.com/shop/ --category=KF --fetch=dpUser.js --download=true
+
+
+
+
+//landezine
+//casperjs index.js --url=http://www.landezine.com/?cat=  --category=landezine --fetch=landezine.js
+
+
+
+//amazon
+// casperjs index.js   --fetch=amazon.js --site=Shoes  --category=bestseller
+
 
 
 var fs=require('fs');
@@ -22,7 +46,9 @@ var opts = {
     fetch : casper.cli.get("fetch"),  
     category : casper.cli.get("category"),
     ifDownLoad : casper.cli.get("download")  ,
-    pg:casper.cli.get("pg")
+    pic:casper.cli.get("pic"),
+    pg:casper.cli.get("pg"),
+    site:casper.cli.get("site")
 };  
 
   console.log('---------------'); 
@@ -30,7 +56,10 @@ var opts = {
  console.log(opts.fetch); 
   console.log(opts.category); 
    console.log(opts.ifDownLoad); 
-  
+    console.log(opts.pic); 
+     console.log(opts.pg); 
+      console.log(opts.site); 
+    
   console.log('---------------'); 
 // 用来计算时间  
 var startTime, endTime;  
@@ -41,7 +70,7 @@ casper.start();
   
   
 // 这句很重要,如果没有设置userAgent,则很多website会拒绝访问  
-var userAgentString = 'Mozilla/5.0 (Macintosh; Intel Mac OS X)';  
+var userAgentString = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.152 Safari/537.36';  
 casper.userAgent(userAgentString);  
   
 
@@ -52,31 +81,49 @@ casper.then(function(){startTime = + new Date;});
   
 // 使用fetch文件夹中相对应的方法去捕获信息  
 
-casper.then(function(){  
+if (opts.category) {
+
+    casper.then(function(){  
 
     if (opts.ifDownLoad) {
 
-        var json=fs.read('./data/'+opts.fetch.replace('.js','')+'/'+opts.category+'1.json');
-        
-        json=JSON.parse(json);
-        
-        opts.link=json;
+        var json;
 
-        this.echo('LoadJson---------------------------------------');
+        if (opts.pic) {
+
+            json=fs.read('./data/'+opts.fetch.replace('.js','')+'/'+opts.category+'Personas.json');
+             console.log("downLoad--true--------------------------pic--true");
+             //console.log(json);
+            opts.link=JSON.parse(json);
+
+
+        }else{
+            
+            json=fs.read('./data/'+opts.fetch.replace('.js','')+'/'+opts.category+'1.json');
         
-        require("./fetch/"+opts.fetch.replace(".js","Pic.js")).call(casper,opts);
+            opts.link=JSON.parse(json);
+
+            console.log("downLoad--true--------------------------pic--false");
+  
+
+        };
+
+            this.echo('LoadJson---------------------------------------');
+            // this.echo(opts);
+            require("./fetch/"+opts.fetch.replace(".js","Pic.js")).call(casper,opts);
+        
 
     }else{
-
+        
+               
         require("./fetch/"+opts.fetch).call(casper,opts); 
-
+        
     };
 
      
-}); 
+    }); 
 
-
-
+};
 
 
 
