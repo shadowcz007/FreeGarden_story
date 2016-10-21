@@ -1,19 +1,22 @@
 var _ = require("lodash");  
   
 module.exports = function(opts){  
-    //     
-    //   
-    //var list=[];
-    var page=[];
-    var pageUrl=[]; //所有目录页面的连接
+console.log("---------");
+
+console.log(opts.link[0][opts.site]);
+
+
+
+    var page=opts.link[0][opts.site];
+    var pageUrl=bestSellerHTML(page); //所有目录页面的连接
     var fetchList = []; 
-   // var picList=[];
+  
    var picUrls=[];
-    console.log(opts.url+opts.category+'/');
+  
     //page
     this.thenOpen(opts.url+opts.category+'/',function(){ 
        
-       console.log(opts.url+opts.category+'/');
+       //console.log(opts.url+opts.category+'/');
        // console.log(this);
 
        var okk=this.evaluate(function() {
@@ -153,39 +156,17 @@ module.exports = function(opts){
     
 
 
-/*
-    this.eachThen(opts.url+'/page/'+page,function(){ 
-       
-        console.log(opts.url);
-       // console.log(this);
+//获取商品信息 bestSeller("5")
 
-       var okk=this.evaluate(function() {
+function bestSellerHTML(argument){
+  var pageNum=[1,2,3,4,5],urls=[];  
 
-              var urls=[];
+  for (var i = pageNum.length - 1; i >= 0; i--) {
+    var url="https://www.amazon.com/Best-Sellers-Clothing/zgbs/apparel/ref=zg_bs_apparel_pg_"+pageNum[i]+"?_encoding=UTF8&pg="+pageNum[i]+"&ajax=1&isAboveTheFold=";
+    urls.push(url+0,url+1);
+  };  
 
-              var html=document.getElementsByClassName('entry-title');
-
-              for (var i = html.length - 1; i >= 0; i--) {
-
-                  urls.push(html[i].firstChild.getAttribute("href"));
-
-              };
-
-              return {'url':urls,'pageNumber':pageNumber};
-              
-            
-
-        });
-       var pMax=okk.pageNumber[0].replace('1/','');
-        
-
-       //var str=_.join(okk, '~');
-
-       console.log(okk.pageNumber);
-
-       this.emit('saveToJson',{'url':okk.url,'pageNumber':pMax});
-
-    });  
-  */
+  return urls;
+}
  
 };  

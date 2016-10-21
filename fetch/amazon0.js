@@ -1,0 +1,163 @@
+
+//品类，分类，tilte，href
+function anyDepartment (argument) {
+
+	var cln=$('#zg_browseRoot').children[1].children.length;
+
+	var array0=$('#zg_browseRoot').children[1].children;
+
+	var result=[];
+
+	for (var p=0;p<cln;p++){
+		 result.push({
+			"title":array0[p].children[0].innerText,
+			"href":array0[p].children[0].getAttribute("href")
+
+		})
+	  
+	}
+	console.log(JSON.stringify(result,null,2));
+}
+
+
+
+//获取商品信息 bestSeller("5")
+
+function bestSellerHTML(argument){
+	var pageNum=[1,2,3,4,5],urls=[];	
+
+	for (var i = pageNum.length - 1; i >= 0; i--) {
+		var url="https://www.amazon.com/Best-Sellers-Clothing/zgbs/apparel/ref=zg_bs_apparel_pg_"+pageNum[i]+"?_encoding=UTF8&pg="+pageNum[i]+"&ajax=1&isAboveTheFold=";
+		urls.push(url+0,url+1);
+	};	
+
+	console.log(urls);
+}
+
+//解析bestseller，保存json，及图片
+function bestSellerDownload(){
+	var html=document.getElementsByClassName("zg_itemImmersion");
+	var ln=html.length;console.log(ln);
+	var bs=[];
+	for (var i = ln - 1; i >= 0; i--) {
+		var rank=html[i].getElementsByClassName("zg_rankDiv")[0].innerText.replace('.','');
+		var img=html[i].getElementsByTagName("img")[0].getAttribute("src");
+		//var title=html[i].getElementsByClassName("zg_title")[0].innerText;
+		var link=html[i].getElementsByClassName("zg_title")[0].getElementsByTagName("a")[0].getAttribute("href").replace(/\n|\t/g,'');
+		var review=html[i].getElementsByClassName("zg_reviews")[0].innerText.replace(/ out of 5 stars |,/g,'');
+		var price=html[i].getElementsByClassName("zg_price")[0].innerText.replace(/\n|\t/g,'');
+		bs.push({
+			"rank":rank,
+			"img":img,
+			"title":link.replace(/.*.com\/|\/dp.*/g,''),
+			"link":link,
+			"review":review,
+			"price":price.replace(/\s/g,'')
+		})
+
+		//console.log(link);
+
+	}
+	console.log(bs)
+
+}
+
+function addToCart(){
+	//size
+	var html=$('#native_dropdown_selected_size_name').children();
+	var ln=html.length-1;
+
+	html[1].className="dropdownAvailable";
+	html[1].setAttribute('data-a-css-class','dropdownAvailable');
+	html[2].className="dropdownSelect";
+	html[2].setAttribute('data-a-css-class','dropdownSelect');
+
+//variation_special_size_type
+var html2=$($('#variation_special_size_type').children()[1]).children();
+var ln2=html2.length;
+	html2[0].className="swatchAvailable";	
+	html2[1].className="swatchSelect";
+	
+	$('#addToCart').submit()
+}
+
+//模拟输入数量，点击updata， 
+	var html=document.getElementsByClassName('sc-list-body').children;
+	var ln=html.length;
+	    console.log("监控商品数量－－－－－－－－"+ln);
+	var j=0;
+	var TIME=10000;
+	var MAX=999/(ln-1);//监测ln个商品的时候
+		console.log("假定每个商品最大库存－－－－－－－－"+MAX);
+	var intS=self.setInterval("clock()",TIME);
+	var list=[];
+	    //console.log("监控频率／秒-------------"+TIME/1000);
+	function clock(){
+	  console.log(j);
+		
+	if(j-1>=0 && html[j-1].getElementsByTagName("li")[1]){
+	    console.log(html[j-1].getElementsByTagName("li")[1].innerText)
+		console.log(html[j-1].getElementsByTagName("li")[0].getElementsByTagName("a")[0].getAttribute("href"))
+		var title= html[j-1].getElementsByTagName("li")[0].innerText;
+	    var stock;
+		var testText= html[j-1].getElementsByTagName("li")[1].innerText;  
+		var regexp = /Usually/gi;
+
+		if(testText && testText!=="In Stock" && !regexp.test(testText) ){
+			stock= html[j-1].getElementsByTagName("li")[1].innerText;
+		}else{
+
+	   	 	var pppf= html[j-1].getElementsByClassName('sc-quantity-textfield')[0];
+			
+			if(pppf){
+					 if(pppf.value){
+						stock=pppf.value;
+					}else{
+				         var sel=html[j-1].getElementsByClassName('sc-invisible-when-no-js')[2].getElementsByTagName('select')[0];
+				         stock=sel.options[sel.selectedIndex].text;		
+					}
+			}		
+				
+
+	 	}   
+	    
+		var url= html[j-1].getElementsByTagName("li")[0].getElementsByTagName("a")[0].getAttribute("href");
+	    
+	    list.push({
+	        "time":new Date(),
+	        "title":title,
+	        "stock":stock,
+	        "url":url
+	        
+	    })
+			
+	}
+
+	if(j>=ln){
+
+	    intS=window.clearInterval(intS);
+	    console.log("监控完毕------------");
+	    console.log(list);
+	    
+	    return
+	}
+
+	var ppp= html[j].getElementsByClassName('sc-quantity-textfield');
+
+	if(ppp[0]){
+	  ppp[0].className=ppp[0].className.replace('sc-hidden','');
+
+	  ppp[0].value=MAX;
+	  ppp[0].nextElementSibling.children[0].getElementsByTagName("a")[0].click();
+	}else{
+	  console.log("erro");  
+	}
+
+	j++; 
+
+	console.log("------------------------------------------------") 
+	 
+	}
+
+
+
