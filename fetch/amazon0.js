@@ -180,9 +180,18 @@ rank=trDOM[i].innerText.replace(/Best Sellers Rank|\n|\s/ig,' ').replace(/\s{2,}
 rank=rank.split('#').slice(1);
 result['rank']=rank;
 
+}else{
+otherBest();
 };
 
 };
+function otherBest(){
+var salesRank=document.getElementById('SalesRank').innerText.replace(/amazon Best Sellers Rank:|\n|\s/ig,' ').replace(/\s{2,}/g,'');;
+
+salesRank=salesRank.split('#').slice(1);
+result['rank']=salesRank;
+
+}
 console.log(result);
 
 
