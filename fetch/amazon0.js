@@ -159,5 +159,30 @@ var ln2=html2.length;
 	 
 	}
 
+//监控 某一个商品的排名，reviews
+var regBest=/sellers rank/ig;
+var regReviews=/customer reviews/ig;
+var trDOM=document.getElementsByTagName('tr');
+var rank,reviews,title;
+var result=[];
+result['url']=document.URL;
+result['title']=document.getElementById('productTitle').innerText;
+for(var i=0;i<=trDOM.length-1;i++){
+var str=trDOM[i].innerText;
+var bTest=regBest.test(str);
+var aTest=regReviews.test(str);
+if(aTest){
+  reviews=str.replace(/\n.*/g,'');
+  result['reviews']=reviews;
+}
+if(bTest){
+rank=trDOM[i].innerText.replace(/Best Sellers Rank|\n|\s/ig,' ').replace(/\s{2,}/g,'');
+rank=rank.split('#').slice(1);
+result['rank']=rank;
+
+};
+
+};
+console.log(result);
 
 
