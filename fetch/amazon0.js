@@ -179,7 +179,7 @@ for (var j=0;j<=ulDOM.length-1;j++){
     console.log(result['ASIN']);
   };
   if(dTest){
-    result['firstDate']=ostr.replace(/.*:/ig,'');
+    result['firstDate']=new Date(ostr.replace(/.*:/ig,''));
     console.log(result['firstDate']);
   }
   
@@ -215,4 +215,3 @@ result['rank']=salesRank;
 
 }
 console.log(result);
-
