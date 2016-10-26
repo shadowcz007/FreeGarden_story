@@ -161,7 +161,6 @@ var ln2=html2.length;
 
 //监控 某一个商品的排名，reviews,keywords,ASIN,firtDate,
 
-
 var regBest=/sellers rank/ig;
 var regReviews=/customer reviews/ig;
 var regASIN=/ASIN/ig;
@@ -197,7 +196,7 @@ for (var j=0;j<=ulDOM.length-1;j++){
 
 
 result['url']=document.URL;
-//result['title']=document.getElementById('productTitle').innerText;
+result['title']=document.URL.replace(/.*.com\/|\/dp.*/g,'');
 for(var i=0;i<=trDOM.length-1;i++){
 var str=trDOM[i].innerText;
 var bTest=regBest.test(str);
