@@ -162,9 +162,31 @@ var ln2=html2.length;
 //监控 某一个商品的排名，reviews
 var regBest=/sellers rank/ig;
 var regReviews=/customer reviews/ig;
+var regASIN=/ASIN/ig;
+var regDF=/Date first available/ig;
+
+var ulDOM=document.getElementById('detailBullets_feature_div').children[0].children;
 var trDOM=document.getElementsByTagName('tr');
 var rank,reviews,title;
 var result=[];
+
+for (var j=0;j<=ulDOM.length-1;j++){
+  var ostr=ulDOM[j].innerText;
+  var cTest=regASIN.test(ostr);
+  var dTest=regDF.test(ostr);
+  if(cTest){
+    result['ASIN']=ostr.replace(/ASIN:|\s/ig,'');
+    console.log(result['ASIN']);
+  };
+  if(dTest){
+    result['firstDate']=ostr.replace(/.*:/ig,'');
+    console.log(result['firstDate']);
+  }
+  
+}
+
+
+
 result['url']=document.URL;
 result['title']=document.getElementById('productTitle').innerText;
 for(var i=0;i<=trDOM.length-1;i++){
@@ -193,5 +215,4 @@ result['rank']=salesRank;
 
 }
 console.log(result);
-
 
