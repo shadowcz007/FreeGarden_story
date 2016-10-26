@@ -159,17 +159,26 @@ var ln2=html2.length;
 	 
 	}
 
-//监控 某一个商品的排名，reviews
+//监控 某一个商品的排名，reviews,keywords,ASIN,firtDate,
+
+
 var regBest=/sellers rank/ig;
 var regReviews=/customer reviews/ig;
 var regASIN=/ASIN/ig;
 var regDF=/Date first available/ig;
 
+
+var pDOM=document.getElementsByTagName('meta');
 var ulDOM=document.getElementById('detailBullets_feature_div').children[0].children;
 var trDOM=document.getElementsByTagName('tr');
 var rank,reviews,title;
-var result=[];
+var result={};
+for (var u=0;u<=pDOM.length-1;u++){
+  if(pDOM[u].getAttribute('name')=='keywords'){
+     result['keywords']=pDOM[u].getAttribute('content');
 
+  }
+}
 for (var j=0;j<=ulDOM.length-1;j++){
   var ostr=ulDOM[j].innerText;
   var cTest=regASIN.test(ostr);
@@ -188,7 +197,7 @@ for (var j=0;j<=ulDOM.length-1;j++){
 
 
 result['url']=document.URL;
-result['title']=document.getElementById('productTitle').innerText;
+//result['title']=document.getElementById('productTitle').innerText;
 for(var i=0;i<=trDOM.length-1;i++){
 var str=trDOM[i].innerText;
 var bTest=regBest.test(str);
