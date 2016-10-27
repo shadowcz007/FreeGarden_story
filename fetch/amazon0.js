@@ -223,3 +223,28 @@ result['rank']=salesRank;
 
 }
 console.log(result);
+
+
+// topReviewers()
+setInterval("topReviewers()",3000);
+function topReviewers(){
+var links=document.links,_result=[],ln=links.length;
+var regName=/_name/ig,
+    regNext=/Next »/ig;
+var next;
+for(var i=0;i<=links.length-1;i++){
+  ln--;
+  if(regName.test(links[i].href)){
+   
+    _result.push(links[i].href);
+  }
+  if(regNext.test(links[i].innerText)){
+    next=links[i];
+  }
+if(ln<=0){
+console.log();
+ localStorage[document.URL.replace(/.*_|.*=/g,'')]=_result;
+console.log(next);
+next.click()
+}
+}}
