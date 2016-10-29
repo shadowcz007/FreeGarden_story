@@ -252,6 +252,7 @@ next.click()
 
 /// user detail
 var result={},reviewsContent=[];
+result['avatar']=document.getElementsByClassName('pr-avatar-decorator')[0].getElementsByTagName('img')[0].src;
 if(document.getElementsByClassName('list-count')[0]){
 result['wListCount']=document.getElementsByClassName('list-count')[0].innerText.replace(/\(|\)/g,'');}
 result['userID']=document.URL.replace(/.*profile\/|\/ref=.*/ig,'');
