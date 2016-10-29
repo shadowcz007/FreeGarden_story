@@ -252,8 +252,10 @@ next.click()
 
 /// user detail
 var result={},reviewsContent=[];
+result['wListCount']=document.getElementsByClassName('list-count')[0].innerText.replace(/\(|\)/g,'');
 result['userID']=document.URL.replace(/.*profile\/|\/ref=.*/ig,'');
-result['location']=document.getElementsByClassName('location-and-occupation-holder')[0].innerText.replace(/\n/ig,'');
+if(document.getElementsByClassName('location-and-occupation-holder')[0]){
+result['location']=document.getElementsByClassName('location-and-occupation-holder')[0].innerText.replace(/\n/ig,'');}
 result['bioExpander']=document.getElementsByClassName('bio-expander')[0].innerText.replace(/\n/ig,'').replace(/Helpful votes.*/ig,'');
 var rTitle=document.getElementsByClassName('glimpse-product-title');
 var rDate=document.getElementsByClassName('glimpse-raw-timestamp');
@@ -272,4 +274,3 @@ if(ln<=0){
 }
 }
 console.log(result)
-    
