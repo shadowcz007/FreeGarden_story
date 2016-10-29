@@ -252,7 +252,8 @@ next.click()
 
 /// user detail
 var result={},reviewsContent=[];
-result['wListCount']=document.getElementsByClassName('list-count')[0].innerText.replace(/\(|\)/g,'');
+if(document.getElementsByClassName('list-count')[0]){
+result['wListCount']=document.getElementsByClassName('list-count')[0].innerText.replace(/\(|\)/g,'');}
 result['userID']=document.URL.replace(/.*profile\/|\/ref=.*/ig,'');
 if(document.getElementsByClassName('location-and-occupation-holder')[0]){
 result['location']=document.getElementsByClassName('location-and-occupation-holder')[0].innerText.replace(/\n/ig,'');}
