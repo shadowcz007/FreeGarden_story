@@ -248,3 +248,28 @@ console.log(next);
 next.click()
 }
 }}
+
+
+/// user detail
+var result={},reviewsContent=[];
+result['userID']=document.URL.replace(/.*profile\/|\/ref=.*/ig,'');
+result['location']=document.getElementsByClassName('location-and-occupation-holder')[0].innerText.replace(/\n/ig,'');
+result['bioExpander']=document.getElementsByClassName('bio-expander')[0].innerText.replace(/\n/ig,'').replace(/Helpful votes.*/ig,'');
+var rTitle=document.getElementsByClassName('glimpse-product-title');
+var rDate=document.getElementsByClassName('glimpse-raw-timestamp');
+ 
+var ln=rTitle.length;
+for(var i=0;i<rTitle.length;i++){
+  ln--; 
+     
+     reviewsContent.push({
+    'title':rTitle[i].innerText,
+    'date':rDate[i].innerText
+   });
+ 
+if(ln<=0){
+  result['reviewsContent']=reviewsContent;
+}
+}
+console.log(result)
+    
